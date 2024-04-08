@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Internet_Store.ApiJson
+namespace Internet_Store.ApiJsonResponse
 {
     public class AccesTokenHandler
     {
         [Required]
-        public string AccessToken {  get; set; }
+        public string AccessToken { get; set; }
     }
 }

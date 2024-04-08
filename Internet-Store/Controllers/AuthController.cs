@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Internet_Store.EmailActions;
+using Internet_Store.ApiJsonResponse;
 namespace Internet_Store.Controllers
 {
     [ApiController]
@@ -59,26 +60,26 @@ namespace Internet_Store.Controllers
         }
         [HttpPost]
 
-        public async Task<IActionResult> Register(string name, string email, string password)
+        public async Task<IActionResult> Register(RegistrationJson registrationJson)
         {
             // Регулярное выражение для проверки email
             string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-            bool isValidEmail = Regex.IsMatch(email, pattern);
+            bool isValidEmail = Regex.IsMatch(registrationJson.Email, pattern);
             if (isValidEmail)
             {
                 using (AppDbContext context = new AppDbContext())
                 {
-                    var findUser = await context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                    var findUser = await context.Users.FirstOrDefaultAsync(u => u.Email == registrationJson.Email);
                     if (findUser is null)
                     {
 
                         var emailservice = new EmailConfirmation();
-                        var Token = await emailservice.ConfirmEmailAsync(email);
+                        var Token = await emailservice.ConfirmEmailAsync(registrationJson.Email);
                         var people = new User()
                         {
-                            Name = name,
-                            Email = email,
-                            Password = password,
+                            Name = registrationJson.Name,
+                            Email = registrationJson.Email,
+                            Password = registrationJson.Password,
                             EmailToken = Token
                         };
                         await context.Users.AddAsync(people);
@@ -87,7 +88,7 @@ namespace Internet_Store.Controllers
                     else return BadRequest("Пользователь с такой почтой уже существует");
 
                 }
-                return Ok();
+                return Ok("Пользователь успешно зарегистрирован");
             }
             else return BadRequest("Неправильная почта");
 
