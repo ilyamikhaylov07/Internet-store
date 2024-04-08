@@ -1,7 +1,9 @@
-﻿namespace Internet_Store.ApiJson
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Internet_Store.ApiJson
 {
     public class AccesTokenHandler
     {
-        public string AccessToken {  get; set; }
+        public required string AccessToken {  get; set; }
     }
 }
