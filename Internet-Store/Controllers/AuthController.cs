@@ -16,7 +16,8 @@ namespace Internet_Store.Controllers
         [HttpPost]
         public async Task<IActionResult> LoginUser(LoginJson user)
         {
-            using (AppDbContext context = new AppDbContext()) {
+            using (AppDbContext context = new AppDbContext())
+            {
                 var user_ = context.Users.FirstOrDefaultAsync<User>(x => x.Email == user.Email && x.Password == user.Password);
                 if (user_ is null)
                 {
