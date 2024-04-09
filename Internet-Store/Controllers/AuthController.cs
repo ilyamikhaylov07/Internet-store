@@ -1,4 +1,6 @@
 ﻿using Internet_Store.ApiJson;
+using Internet_Store.ApiJsonResponse;
+using Internet_Store.EmailActions;
 using Internet_Store.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -6,8 +8,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using Internet_Store.EmailActions;
-using Internet_Store.ApiJsonResponse;
 namespace Internet_Store.Controllers
 {
     [ApiController]
@@ -67,28 +67,34 @@ namespace Internet_Store.Controllers
             bool isValidEmail = Regex.IsMatch(registrationJson.Email, pattern);
             if (isValidEmail)
             {
-                using (AppDbContext context = new AppDbContext())
+                if (registrationJson.Password.Length > 7)
                 {
-                    var findUser = await context.Users.FirstOrDefaultAsync(u => u.Email == registrationJson.Email);
-                    if (findUser is null)
+                    using (AppDbContext context = new AppDbContext())
                     {
-
-                        var emailservice = new EmailConfirmation();
-                        var Token = await emailservice.ConfirmEmailAsync(registrationJson.Email);
-                        var people = new User()
+                        var findUser = await context.Users.FirstOrDefaultAsync(u => u.Email == registrationJson.Email);
+                        if (findUser is null)
                         {
-                            Name = registrationJson.Name,
-                            Email = registrationJson.Email,
-                            Password = registrationJson.Password,
-                            EmailToken = Token
-                        };
-                        await context.Users.AddAsync(people);
-                        await context.SaveChangesAsync();
-                    }
-                    else return BadRequest("Пользователь с такой почтой уже существует");
 
+                            var emailservice = new EmailConfirmation();
+                            var Token = await emailservice.ConfirmEmailAsync(registrationJson.Email);
+                            var people = new User()
+                            {
+                                Name = registrationJson.Name,
+                                Email = registrationJson.Email,
+                                Password = registrationJson.Password,
+                                EmailToken = Token
+                            };
+                            await context.Users.AddAsync(people);
+                            await context.SaveChangesAsync();
+                        }
+                        else return BadRequest("Пользователь с такой почтой уже существует");
+
+                    }
+                    return Ok("Пользователь успешно зарегистрирован");
                 }
-                return Ok("Пользователь успешно зарегистрирован");
+                else return BadRequest("Пароль должен содержать от 8 символов");
+
+                
             }
             else return BadRequest("Неправильная почта");
 
@@ -102,8 +108,8 @@ namespace Internet_Store.Controllers
             {
                 if (await context.Users.FirstOrDefaultAsync<User>(x => x.EmailToken == Token) is not null)
                 {
-                    var user=await context.Users.FirstOrDefaultAsync<User>(x => x.EmailToken == Token);
-                    user.IsConfirmed=true;
+                    var user = await context.Users.FirstOrDefaultAsync<User>(x => x.EmailToken == Token);
+                    user.IsConfirmed = true;
                     await context.SaveChangesAsync();
                     return Ok("Почта подтверждена");
                 }
