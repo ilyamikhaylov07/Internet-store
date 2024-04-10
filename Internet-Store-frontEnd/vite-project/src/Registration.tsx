@@ -7,28 +7,70 @@ import Row from 'react-bootstrap/Row';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import registrationApi from '../src/Api-function/registrationApi'
+
+
+async function registrationApi(name, email, password, setValidated,setPassword, setConfirmPassword, setPasswordsMatch ) {
+  
+  const body = JSON.stringify({
+    name: name,
+    email: email,
+    password: password
+  });
+
+  try {
+    const response = await fetch('https://localhost:7239/Internetstore/Auth/Register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: body
+    });
+
+    if (!response.ok) {
+      throw new Error('Ошибка при регистрации');
+    }
+
+    setValidated(true);
+    setPassword('');
+    setConfirmPassword('');
+    setPasswordsMatch(true);
+    alert('Ваша учетная запись была успешно создана. Теперь вы можете войти.');
+  } catch (error) {
+    setValidated(true);
+    setPasswordsMatch(false);
+    alert(error.message);
+  }
+}
+
 function Registration() {
+  
+
   const [validated, setValidated] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Хук для показа пароля
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); // Хук подтверждения пароля
   const [passwordsMatch, setPasswordsMatch] = useState(true); // Хук на совпадение пароля
   const [activeTab, setActiveTab] = useState('registration'); // Состояние для отслеживания текущей активной вкладки
-
+ let password1 : any
+ let email1 : any
+ let name1 : any
   const handleSubmit = (event) => {
-    const form = event.currentTarget;
-    if (form.checkValidity() === false || password !== confirmPassword) { // Проверка на соответствие пароля
-      event.preventDefault();
-      event.stopPropagation();
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+   name1 = formData.get('name');
+   email1 = formData.get('email');
+   password1 = formData.get('password');
+
+    if (password !== confirmPassword) {
       setValidated(true);
       setPasswordsMatch(false);
     } else {
       setValidated(true);
       setPasswordsMatch(true);
     }
-  };
 
+    registrationApi(name1, email1, password1, setValidated, setPassword, setConfirmPassword, setPasswordsMatch);
+  };
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -56,12 +98,13 @@ function Registration() {
         style={{ textAlign: 'center' }} // Выравнивание текста во вкладках по центру
       >
         <Tab eventKey="registration" title="Регистрация">
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} id = "myForm" onSubmit={handleSubmit}>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="validationCustom01">
                 <Form.Label>Имя</Form.Label>
                 <Form.Control
                   required
+                  name = "name"
                   type="text"
                   placeholder="Введите ваше имя"
                 />
@@ -72,6 +115,7 @@ function Registration() {
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   required
+                  name = "email"
                   type="email"
                   placeholder="Введите ваш email"
                 />
@@ -85,6 +129,7 @@ function Registration() {
                     type={showPassword ? "text" : "password"}
                     placeholder="Введите ваш пароль"
                     required
+                    name = "password"
                     value={password}
                     onChange={handlePasswordChange}
                   />
@@ -129,7 +174,7 @@ function Registration() {
                 />
               </Form.Group>
             </Row>
-            <Button type="submit" onClick={registrationApi()}>Зарегистрироваться</Button>
+            <Button type = "submit" >Зарегистрироваться</Button>
           </Form>
         </Tab>
         <Tab eventKey="login" title="Вход">

@@ -1,11 +1,11 @@
 
 
-async function registrationApi(form: { elements: { name: { value: any; }; email: { value: any; }; password: { value: any; }; }; reset: () => void; }, 
-validatedSetter: (arg0: boolean) => void, passwordSetter: (arg0: string) => void, confirmPasswordSetter: (arg0: string) => void, passwordsMatchSetter: (arg0: boolean) => void){
+async function registrationApi(form: any , 
+  validatedSetter: (arg0: boolean) => void, passwordSetter: (arg0: string) => void, confirmPasswordSetter: (arg0: string) => void, passwordsMatchSetter: (arg0: boolean) => void){
    // Передаем состояния и методы обновления в функцию registrationApi
  
     try {
-      const response = await fetch('http://example.com/api/register', {
+      const response = await fetch('https://localhost:7239/Internetstore/Auth/Register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
