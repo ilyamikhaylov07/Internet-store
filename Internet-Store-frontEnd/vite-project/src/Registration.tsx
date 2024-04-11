@@ -20,7 +20,7 @@ function Registration() {
   const [confirmPassword, setConfirmPassword] = useState(''); // Хук подтверждения пароля
   const [passwordsMatch, setPasswordsMatch] = useState(true); // Хук на совпадение пароля
   const [activeTab, setActiveTab] = useState('registration'); // Состояние для отслеживания текущей активной вкладки
-
+  const [isChecked, setisChecked] = useState(false);
   const handleRegister = (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
@@ -38,14 +38,21 @@ function Registration() {
 
     registrationApi(name1, email1, password1, setValidated, setPassword, setConfirmPassword, setPasswordsMatch);
   };
-
-  const handleLogin = (event) => {
+const handleChangeIsCheck = () => {
+  setisChecked((prev) => !prev)
+}
+  const handleLogin = (event, isChecked) => {
     event.preventDefault();
-    var checkbox = document.getElementById("mycheckbox");
     const formData = new FormData(event.currentTarget);
    const email1 = formData.get('email');
    const password1 = formData.get('password');
+   if(isChecked === false){
     loginApi(email1, password1, setValidated, setPassword);
+    
+   }
+  else{
+      adminApi(email1, password1,setValidated, setPassword )
+  }
   };
   
   
@@ -157,7 +164,7 @@ function Registration() {
           </Form>
         </Tab>
         <Tab eventKey="login" title="Вход">
-          <Form noValidate validated={validated} onSubmit={handleLogin}>
+          <Form noValidate validated={validated} onSubmit={(e) => handleLogin(e, isChecked)}>
             <Row className="mb-3">
               <Form.Group as={Col} controlId="validationCustom02">
                 <Form.Label>Email</Form.Label>
@@ -196,6 +203,7 @@ function Registration() {
                   id = "mycheckbox"
                   type = "checkbox"
                   label="Администратор"
+                  onChange={handleChangeIsCheck}
                 />
               </Form.Group>
             </Row>
