@@ -9,6 +9,9 @@ namespace Internet_Store.ApiJsonResponse
         [Required]
         public string Price { get; set; }
         [Required]
+        public List<string> Sizes { get; set; }=new List<string>();
+        [Required]
         public byte[] Image { get; set; }
+
     }
 }

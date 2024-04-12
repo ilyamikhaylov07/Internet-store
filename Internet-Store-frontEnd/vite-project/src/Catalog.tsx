@@ -3,11 +3,13 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 interface Product {
     name: string;
     price: string;
     image: string;
+    sizes: string[];
 }
 
 function CatalogPage() {
@@ -18,6 +20,15 @@ function CatalogPage() {
             .then(res => res.json())
             .then(data => setProducts(data));
     }, []);
+
+    const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
+
+    const handleSizeSelection = (productIndex: number, size: string) => {
+        setSelectedSizes((prevSelectedSizes) => ({
+            ...prevSelectedSizes,
+            [productIndex]: size
+        }));
+    };
 
     return (
         <Row className="mt-5 justify-content-center my-2 gx-1">
@@ -44,6 +55,24 @@ function CatalogPage() {
                             <Card.Body>
                                 <Card.Title>{product.name}</Card.Title>
                                 <Card.Text>Цена: {product.price}</Card.Text>
+
+                                {/* Кнопки размеров */}
+                                <div style={{ marginBottom: '10px', maxWidth: '100%', overflowX: 'auto', scrollbarWidth: 'thin' }}>
+                                    <ButtonGroup style={{ flexWrap: 'nowrap' }}>
+                                        {product.sizes.map((size) => (
+                                            <Button
+                                                key={size}
+                                                variant={selectedSizes[index] === size ? 'primary' : 'secondary'}
+                                                onClick={() => handleSizeSelection(index, size)}
+                                                style={{ marginRight: '5px' }}
+                                            >
+                                                {size}
+                                            </Button>
+                                        ))}
+                                    </ButtonGroup>
+                                </div>
+
+                                {/* Кнопка "Купить" */}
                                 <Button variant="primary">Купить</Button>
                             </Card.Body>
                         </Card>
