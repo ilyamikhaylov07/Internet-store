@@ -6,6 +6,7 @@ namespace Internet_Store.Controllers
     [Route("Internet-store/[controller]/[action]")]
     public class LK_Controller : ControllerBase
     {
+        [HttpGet]
         public IActionResult Index()
         {
             return Ok();
