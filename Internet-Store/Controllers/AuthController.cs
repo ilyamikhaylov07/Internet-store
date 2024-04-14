@@ -27,7 +27,7 @@ namespace Internet_Store.Controllers
                         return BadRequest("Неправильный логин или пароль");
                     }
                     List<Claim> Claims = new List<Claim>();
-                    Claims.Add(new Claim(ClaimTypes.Name, user_.Result.Name));
+                    Claims.Add(new Claim(ClaimTypes.Email, user_.Result.Email));
                     Claims.Add(new Claim(ClaimTypes.Role, "User"));
                     var jwt = new JwtSecurityToken(issuer: AuthOptions.ISSUER,// создание токенов для возвращения метода
                     audience: AuthOptions.AUDIENCE,
@@ -56,7 +56,7 @@ namespace Internet_Store.Controllers
                         return BadRequest("Неправильный логин или пароль");
                     }
                     List<Claim> Claims = new List<Claim>();
-                    Claims.Add(new Claim(ClaimTypes.Name, user_.Result.Name));
+                    Claims.Add(new Claim(ClaimTypes.Email, user_.Result.Email));
                     Claims.Add(new Claim(ClaimTypes.Role, "Admin"));
                     var jwt = new JwtSecurityToken(issuer: AuthOptions.ISSUER,// создание токенов для возвращения метода
                     audience: AuthOptions.AUDIENCE,

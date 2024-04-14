@@ -10,10 +10,10 @@ import Tabs from 'react-bootstrap/Tabs';
 import registrationApi from '../src/Api-function/registrationApi'
 import loginApi from '../src/Api-function/loginApi'
 import adminApi from './Api-function/adminApi';
+import {Navigate, useNavigate} from 'react-router-dom'
 
-function Registration() {
-  
-
+function Registration({setIsLoggedIn}) {
+  const history = useNavigate() // штука для перенаправления
   const [validated, setValidated] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Хук для показа пароля
   const [password, setPassword] = useState('');
@@ -21,7 +21,7 @@ function Registration() {
   const [passwordsMatch, setPasswordsMatch] = useState(true); // Хук на совпадение пароля
   const [activeTab, setActiveTab] = useState('registration'); // Состояние для отслеживания текущей активной вкладки
   const [isChecked, setisChecked] = useState(false);
-  const handleRegister = (event) => {
+  const handleRegister = (event:any) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
    const name1 = formData.get('name');
@@ -41,17 +41,18 @@ function Registration() {
 const handleChangeIsCheck = () => {
   setisChecked((prev) => !prev)
 }
-  const handleLogin = (event, isChecked) => {
+  const handleLogin = async (event:any, isChecked:boolean) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
    const email1 = formData.get('email');
    const password1 = formData.get('password');
    if(isChecked === false){
-    loginApi(email1, password1, setValidated, setPassword);
-    
+    await loginApi(email1, password1, setValidated, setPassword);
+    setIsLoggedIn(true); // Здесь вызывается функция onLogin, которая устанавливает isLoggedIn в true
+    history('/catalog')
    }
   else{
-      adminApi(email1, password1,setValidated, setPassword )
+      await adminApi(email1, password1,setValidated, setPassword )
   }
   };
   
@@ -61,15 +62,15 @@ const handleChangeIsCheck = () => {
     setShowPassword(!showPassword);
   };
 
-  const handlePasswordChange = (event) => {
+  const handlePasswordChange = (event:any) => {
     setPassword(event.target.value);
   };
 
-  const handleConfirmPasswordChange = (event) => {
+  const handleConfirmPasswordChange = (event:any) => {
     setConfirmPassword(event.target.value);
   };
 
-  const handleTabChange = (tab) => {
+  const handleTabChange = (tab:any) => {
     setActiveTab(tab);
   };
   
@@ -166,7 +167,7 @@ const handleChangeIsCheck = () => {
         <Tab eventKey="login" title="Вход">
           <Form noValidate validated={validated} onSubmit={(e) => handleLogin(e, isChecked)}>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustom02">
+              <Form.Group as={Col} controlId="validationCustomEmailLogin">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   required
@@ -177,7 +178,7 @@ const handleChangeIsCheck = () => {
               </Form.Group>
             </Row>
             <Row className="mb-3">
-              <Form.Group as={Col} controlId="validationCustomPassword">
+              <Form.Group as={Col} controlId="validationCustomPasswordLogin">
                 <Form.Label>Пароль</Form.Label>
                 <InputGroup hasValidation>
                   <Form.Control

@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 
-function MainBar() {
+function MainBar({isLoggedIn, handleLogoutUser}) {
+  
+
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
@@ -19,7 +22,14 @@ function MainBar() {
           </Nav>
           <Nav>
             <Nav.Link as={Link} to="/cart">Корзина</Nav.Link>
-            <Nav.Link as={Link} to="/login">Вход</Nav.Link>
+            {isLoggedIn ? (
+              <>
+                <Nav.Link as={Link} to="/profile">Личный кабинет</Nav.Link>
+                <Nav.Link onClick={handleLogoutUser}>Выйти</Nav.Link>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/login">Вход</Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

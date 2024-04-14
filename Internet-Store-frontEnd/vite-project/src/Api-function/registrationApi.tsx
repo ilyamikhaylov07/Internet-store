@@ -1,5 +1,4 @@
-async function registrationApi(name, email, password, setValidated,setPassword, setConfirmPassword, setPasswordsMatch ) {
-  
+async function registrationApi(name, email, password, setValidated, setPassword, setConfirmPassword, setPasswordsMatch) {
   const body = JSON.stringify({
     name: name,
     email: email,
@@ -18,6 +17,11 @@ async function registrationApi(name, email, password, setValidated,setPassword, 
     if (!response.ok) {
       throw new Error('Ошибка при регистрации');
     }
+
+    const data = await response.json();
+
+    // Сохраняем токен в Local Storage
+    localStorage.setItem('accessToken', data.accessToken);
 
     setValidated(true);
     setPassword('');

@@ -5,6 +5,7 @@ namespace Internet_Store
 {
     public class AuthOptions
     {
+
         public const string ISSUER = "MyAuthServer";
         public const string AUDIENCE = "MyAuthClient";
         const string KEY = "mysupersecret_secretsecretsecretkey!123";

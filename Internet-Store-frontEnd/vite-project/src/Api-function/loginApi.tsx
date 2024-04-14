@@ -1,30 +1,36 @@
-async function loginApi(email, password, setValidated,setPassword) {
+async function loginApi(email, password, setValidated, setPassword) {
   
-    const body = JSON.stringify({
+  const body = JSON.stringify({
       email: email,
       password: password
-    });
-  
-    try {
+  });
+
+  try {
       const response = await fetch('https://localhost:7239/Internetstore/Auth/LoginUser', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: body
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: body
       });
-      console.log(response.json())
+
       if (!response.ok) {
-        throw new Error('Неверные данные');
+          throw new Error('Неверные данные');
       }
-  
+
+      const data = await response.json();
+
+      // Сохраняем токен в localStorage
+      localStorage.setItem('accessToken', data.accessToken);
+      console.log(localStorage)
+
       setValidated(true);
       setPassword('');
       alert('Вы вошли');
-    } catch (error) {
+  } catch (error) {
       setValidated(true);
       alert(error.message);
-    }
   }
+}
 
-  export default loginApi
+export default loginApi;
