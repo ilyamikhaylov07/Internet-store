@@ -27,9 +27,11 @@ async function loginApi(email, password, setValidated, setPassword) {
       setValidated(true);
       setPassword('');
       alert('Вы вошли');
+      return true
   } catch (error) {
       setValidated(true);
       alert(error.message);
+      return false;
   }
 }
 

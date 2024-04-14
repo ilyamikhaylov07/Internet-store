@@ -12,7 +12,7 @@ import loginApi from '../src/Api-function/loginApi'
 import adminApi from './Api-function/adminApi';
 import {Navigate, useNavigate} from 'react-router-dom'
 
-function Registration({setIsLoggedIn}) {
+function Registration({setIsLoggedIn, setIsLoggedInAdmin}) {
   const history = useNavigate() // штука для перенаправления
   const [validated, setValidated] = useState(false);
   const [showPassword, setShowPassword] = useState(false); // Хук для показа пароля
@@ -46,14 +46,20 @@ const handleChangeIsCheck = () => {
     const formData = new FormData(event.currentTarget);
    const email1 = formData.get('email');
    const password1 = formData.get('password');
-   if(isChecked === false){
-    await loginApi(email1, password1, setValidated, setPassword);
-    setIsLoggedIn(true); // Здесь вызывается функция onLogin, которая устанавливает isLoggedIn в true
-    history('/catalog')
-   }
-  else{
-      await adminApi(email1, password1,setValidated, setPassword )
+    
+   const success = isChecked ? await adminApi(email1, password1,setValidated, setPassword ) : await loginApi(email1, password1, setValidated, setPassword);
+   if(success){
+    isChecked ? setIsLoggedInAdmin(true) : setIsLoggedIn(true); 
+    if (isChecked) {
+        history('/admin-dashboard'); // Перенаправляем администратора на страницу администратора
+    } else {
+        history('/catalog'); // Перенаправляем обычного пользователя на каталог
+    }
+    
+    // Здесь вызывается функция SetisLoggedIn, которая устанавливает isLoggedIn в true
   }
+    
+    ;
   };
   
   

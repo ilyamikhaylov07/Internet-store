@@ -44,6 +44,8 @@ function CategoryFilterForm({ onCategoryChange, onPriceChange }) {
             maxPrice:maxPrice.toString()
         }).toString();;
         navigate(`/catalog/filtered?${query}`);
+        location.reload();
+        
     };
 
     return (

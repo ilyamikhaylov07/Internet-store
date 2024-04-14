@@ -22,7 +22,7 @@ namespace Internet_Store
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("host=localhost; port=5432; database=Intenet-Store; Username=postgres; Password = mendo890");
+            optionsBuilder.UseNpgsql("host=localhost; port=5432; database=Intenet-Store; Username=postgres; Password = ilia07ilia");
         }
     }
 }

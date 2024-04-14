@@ -13,17 +13,23 @@ async function adminApi(email, password, setValidated,setPassword) {
         },
         body: body
       });
-      console.log(response.json())
+      
       if (!response.ok) {
         throw new Error('Неверные данные админа');
       }
-  
+      const data = await response.json();
+
+      // Сохраняем токен в localStorage
+      localStorage.setItem('accessToken', data.accessToken);
+      console.log(localStorage)
+
       setValidated(true);
       setPassword('');
-      alert('Вы вошли как админ');
+      return true
     } catch (error) {
       setValidated(true);
       alert(error.message);
+      return false
     }
   }
 
