@@ -7,6 +7,7 @@ import HomePage from './Home';
 import CatalogPage from './Catalog';
 import { useEffect, useState } from 'react';
 import Profile from './Profile';
+import FilteredPage from './FilteredPage';
 function App(){
   const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('accessToken') !== null);
 
@@ -14,6 +15,7 @@ function App(){
     localStorage.removeItem('accessToken');
     setIsLoggedIn(false);
   };
+  
   return (
     
       <Router>
@@ -23,7 +25,8 @@ function App(){
         <Route path="/login" element={<Registration setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/catalog" element={<CatalogPage/>}/>
         <Route path="/profile" element={<Profile/>}/>
-        {/* Добавьте здесь другие маршруты, если необходимо */}
+        <Route path="/catalog/filtered?" element={<FilteredPage/>}/>
+        
       </Routes>
     </Router>
   

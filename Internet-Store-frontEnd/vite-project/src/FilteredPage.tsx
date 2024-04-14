@@ -1,3 +1,4 @@
+import { Form, useLocation } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -6,45 +7,61 @@ import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import CategoryFilterForm from './CategoryFIlterForm';
 
-interface Product {
-    name: string;
-    price: string;
-    image: string;
-    sizes: string[];
-}
-
-function CatalogPage() {
+function FilteredPage() {
+    const location = useLocation();
+    interface Product {
+        name: string;
+        price: string;
+        image: string;
+        sizes: string[];
+    }
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
-
     useEffect(() => {
-        fetch('https://localhost:7239/Internetstore/Models/ModelWithCatalog')
-            .then(res => res.json())
-            .then(data => setProducts(data));
-    }, []);
-
-    const handleSizeSelection = (productIndex: number, size: string) => {
-        setSelectedSizes((prevSelectedSizes) => ({
-            ...prevSelectedSizes,
-            [productIndex]: size
-        }));
-    };
-
-    const handlePriceChange = (price: string) => {
-        // Ваша логика фильтрации по цене
-    };
-    const handleCategoryChange = (minPrice:number,maxPrice:number) => {
-        // Ваша логика фильтрации по цене
-    };
-
+        const query = new URLSearchParams(location.search);
+        let category = query.get('category');
+        const minPrice = query.get('minPrice');
+        const maxPrice = query.get('maxPrice');
+        if(category=="Все категории"){
+            category=null;
+        }
+        
+        const requestData = {
+            categorie: category,
+            from: minPrice || 0,
+            to: maxPrice || 100000
+        };
+        console.log(requestData);
+        fetch('https://localhost:7239/Internetstore/Models/CardsWithFilter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(requestData)
+        })
+        .then(response => response.json(),)
+        .then(data => setProducts(data))
+        .catch(error => {
+        console.error('Error fetching filtered products:', error);
+        });
+        }, []);
+        const handleSizeSelection = (productIndex: number, size: string) => {
+            setSelectedSizes((prevSelectedSizes) => ({
+                ...prevSelectedSizes,
+                [productIndex]: size
+            }));
+        };
+        const handleCategoryChange = (price: string) => {
+            // Ваша логика фильтрации по цене
+        };
+        const handlePriceChange = (minPrice:number,maxPrice:number) => {
+            // Ваша логика фильтрации по цене
+        };
     return (
         <Row className="mt-5 justify-content-center my-2 gx-4">
-            {/* Форма с категориями и фильтром по цене */}
             <Col xs={12} md={3} lg={2}>
                 <CategoryFilterForm onPriceChange={handlePriceChange} onCategoryChange={handleCategoryChange}/>
             </Col>
-
-            {/* Карточки товаров */}
             <Col xs={12} md={9} lg={10}>
                 <Row className="gy-4" style={{ gap: '15px' }}>
                     {products.map((product, index) => (
@@ -98,4 +115,4 @@ function CatalogPage() {
     );
 }
 
-export default CatalogPage;
+export default FilteredPage;
