@@ -1,4 +1,6 @@
-﻿using Internet_Store.ApiJsonResponse;
+﻿using Internet_Store.ApiJson;
+using Internet_Store.ApiJsonResponse;
+using Internet_Store.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +42,35 @@ namespace Internet_Store.Controllers
 
                 }
                 else return NotFound("Admin NotFound");
+
+            }
+            
+        }
+        [Authorize(AuthenticationSchemes ="Access", Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddModel(AddModelJson addModel)
+        {
+            using(AppDbContext context = new AppDbContext())
+            {
+                var model = new Model()
+                {
+                    Name = addModel.Name,
+                    Materials = addModel.Materials,
+                    Price = addModel.Price,
+                    Colour = addModel.Colour,
+                    Brand = addModel.Brand,
+                    Image_url = addModel.Image_url,
+                    CategoryId = addModel.Category_id,
+                    ModelWithSize = addModel.ModelWithSize.Select(s => new ModelWithSize()
+                    {
+                        Size = s.Size,
+                        Amount = s.Amount,
+                    }).ToList()
+                
+                };
+                await context.Models.AddAsync(model);
+                await context.SaveChangesAsync();
+                return Ok();
 
             }
             
