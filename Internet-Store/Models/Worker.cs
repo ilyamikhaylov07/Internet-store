@@ -1,7 +1,10 @@
-﻿namespace Internet_Store.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Internet_Store.Models
 {
     public class Worker
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }

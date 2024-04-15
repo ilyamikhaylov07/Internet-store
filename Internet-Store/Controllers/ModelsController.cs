@@ -122,6 +122,32 @@ namespace Internet_Store.Controllers
             }
 
         }
+        [HttpPost]
+        public async Task<ResponseModelPage> GetModelInfo(string name)
+        {
+            ResponseModelPage model = new ResponseModelPage();
+            using (AppDbContext db = new AppDbContext())
+            {
+                var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Name == name);
+                model.Colour = unfilteredmodel.Colour;
+                model.Name = unfilteredmodel.Name;
+                model.Price = unfilteredmodel.Price;
+                model.Brand = unfilteredmodel.Brand;
+                model.Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", unfilteredmodel.Image_url));
+                model.Materials = unfilteredmodel.Materials;
+                var modelWithSize = await db.ModelWithSizes.Where(m => m.ModelId == unfilteredmodel.Id).ToListAsync();
+                List<string> sizes = new List<string>();
+                foreach (var modelwithsizes in modelWithSize)
+                {
+                    sizes.Add(modelwithsizes.Size);
+                }
+                SizeSort.SortSizes(sizes);
+                model.Sizes = sizes;
+
+            }
+            return model;
+        }
+
 
     }
 }

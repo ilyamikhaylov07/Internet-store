@@ -44,5 +44,34 @@ namespace Internet_Store.Controllers
             }
 
         }
+        [Authorize(AuthenticationSchemes = "Access", Roles = "User")]
+        [HttpPost]
+
+        public async Task<IActionResult> UpdateNumberPhoneUser(string numberphone)
+        {
+            using (AppDbContext context = new AppDbContext())
+            {
+
+                var user_email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                if (user_email != null)
+                {
+                    var users = await context.Users.Where(u => u.Email == user_email).ToListAsync();
+
+                    if (users.Count > 0)
+                    {
+                        var user = users[0];
+                        user.NumberPhone = numberphone;
+                        await context.SaveChangesAsync();
+                        return Ok();
+                    }
+                    else return BadRequest("User not exists");
+
+                }
+                else return NotFound("User NotFound");
+
+            }
+
+        }
+
     }
 }
