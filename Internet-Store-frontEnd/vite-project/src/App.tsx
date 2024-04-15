@@ -10,6 +10,7 @@ import Profile from './Profile';
 import FilteredPage from './FilteredPage';
 import AdminDashboard from './AdminDashboard';
 import AdminProfile from './AdminPages/AdminProfile';
+import ModelPage from './ModelPage';
 
 function App(){
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -49,6 +50,7 @@ function App(){
         {isLoggedInAdmin && (
           <Route path="/profile-admin" element={<AdminProfile/>}/>
         )}
+        <Route path="/catalog/id?" element={<ModelPage/>}/>
         
         
       </Routes>

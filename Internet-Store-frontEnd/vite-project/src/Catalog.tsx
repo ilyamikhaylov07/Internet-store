@@ -5,8 +5,10 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import CategoryFilterForm from './CategoryFIlterForm';
+import { useNavigate } from 'react-router-dom';
 
 interface Product {
+    id:string;
     name: string;
     price: string;
     image: string;
@@ -16,6 +18,7 @@ interface Product {
 function CatalogPage() {
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         fetch('https://localhost:7239/Internetstore/Models/ModelWithCatalog')
@@ -58,6 +61,7 @@ function CatalogPage() {
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)'}
                                 onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
+                                onClick={() => navigate(`/catalog/id?id=${product.id}`)}
                             >
                                 <div style={{ maxHeight: '200px', overflow: 'hidden' }}>
                                     <Card.Img
