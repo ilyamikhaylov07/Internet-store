@@ -34,7 +34,8 @@ namespace Internet_Store.Controllers
                             Name = model.Name,
                             Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", model.Image_url)),
                             Price = model.Price,
-                            Sizes = sizes
+                            Sizes = sizes,
+                            Id = model.Id.ToString()
                         });
 
                     }
@@ -82,7 +83,8 @@ namespace Internet_Store.Controllers
                             Name = model.Name,
                             Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", model.Image_url)),
                             Price = model.Price,
-                            Sizes = sizes
+                            Sizes = sizes,
+                            Id=model.Id.ToString()
                         });
                     }
                     return cardmodels;
@@ -114,7 +116,8 @@ namespace Internet_Store.Controllers
                             Name = model.Name,
                             Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", model.Image_url)),
                             Price = model.Price,
-                            Sizes = sizes
+                            Sizes = sizes,
+                            Id = model.Id.ToString()
                         });
                     }
                     return cardmodels;
@@ -123,16 +126,17 @@ namespace Internet_Store.Controllers
 
         }
         [HttpPost]
-        public async Task<ResponseModelPage> GetModelInfo(string name)
+        public async Task<ResponseModelPage> GetModelInfo(string id)
         {
             ResponseModelPage model = new ResponseModelPage();
             using (AppDbContext db = new AppDbContext())
             {
-                var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Name == name);
+                var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Id == int.Parse(id));
                 model.Colour = unfilteredmodel.Colour;
                 model.Name = unfilteredmodel.Name;
                 model.Price = unfilteredmodel.Price;
                 model.Brand = unfilteredmodel.Brand;
+                model.Category=db.Categories.First(c=> c.Id==unfilteredmodel.CategoryId).Title;
                 model.Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", unfilteredmodel.Image_url));
                 model.Materials = unfilteredmodel.Materials;
                 var modelWithSize = await db.ModelWithSizes.Where(m => m.ModelId == unfilteredmodel.Id).ToListAsync();
@@ -146,6 +150,14 @@ namespace Internet_Store.Controllers
 
             }
             return model;
+        }
+        [HttpGet]
+        public async Task<List<string>> GetCategories()
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                return await db.Categories.Select(c=>c.Title).ToListAsync();
+            }
         }
 
 

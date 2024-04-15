@@ -6,10 +6,13 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import CategoryFilterForm from './CategoryFIlterForm';
+import { useNavigate } from 'react-router-dom';
 
 function FilteredPage() {
+    const navigate = useNavigate(); 
     const location = useLocation();
     interface Product {
+        id:string;
         name: string;
         price: string;
         image: string;
@@ -75,6 +78,7 @@ function FilteredPage() {
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)'}
                                 onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
+                                onClick={() => navigate(`/catalog/id?id=${product.id}`)}
                             >
                                 <div style={{ maxHeight: '200px', overflow: 'hidden' }}>
                                     <Card.Img
