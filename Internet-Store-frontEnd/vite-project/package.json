@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@reduxjs/toolkit": "^2.2.3",
+=======
+    "axios": "^1.6.8",
+>>>>>>> 0a45ac046b16f021ac3f36b2cee981f72962ff8d
     "bootstrap": "^5.3.3",
     "font-awesome": "^4.7.0",
     "icons": "^1.0.0",

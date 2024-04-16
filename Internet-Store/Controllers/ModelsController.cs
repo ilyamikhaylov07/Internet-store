@@ -97,7 +97,7 @@ namespace Internet_Store.Controllers
                     foreach (var model_ in allmodeles)
                     {
                         if (int.Parse(model_.Price) >= int.Parse(filters.From) && int.Parse(model_.Price) <= int.Parse(filters.To) && 
-                            context.Categories.FirstOrDefault(m=> m.Id==model_.CategoryId).Title==filters.Categorie)
+                            context.Categories.FirstOrDefault(m => m.Id==model_.CategoryId).Title==filters.Categorie)
                         {
                             models.Add(model_);
                         }
