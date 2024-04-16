@@ -5,6 +5,8 @@ namespace Internet_Store.ApiJsonResponse
     public class ResponseModelPage
     {
         [Required]
+        public string Id { get; set; }
+        [Required]
         public string Name { get; set; }
         [Required]
         public string Price { get; set; }

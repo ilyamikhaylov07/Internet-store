@@ -19,19 +19,24 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
             <Nav.Link as={Link} to="/faq">FAQ</Nav.Link>
             <Nav.Link as={Link} to="/delivery-and-payment">Доставка и оплата</Nav.Link>
             {/* Страницы для администратора */}
+            </Nav>
+            <Nav className="ms-auto">
             {isLoggedInAdmin && (
               <>
                 <Nav.Link as={Link} to="/admin-dashboard">Панель администратора</Nav.Link>
-                <Nav.Link as={Link} to="/manage-users">Управление пользователями</Nav.Link>
+                <Nav.Link as={Link} to="/profile-admin">Личный кабинет</Nav.Link>
               </>
             )}
-          </Nav>
-          <Nav>
+              {isLoggedIn &&(
+                <>
+                <Nav.Link as={Link} to="profile">Личный кабинет</Nav.Link>
+                </>
+              )}
+            
             <Nav.Link as={Link} to="/cart">Корзина</Nav.Link>
             {isLoggedIn || isLoggedInAdmin ? (
               <>
-                <Nav.Link as={Link} to="/profile">Личный кабинет</Nav.Link>
-                <Nav.Link onClick={isLoggedInAdmin ? handleLogoutAdmin : handleLogoutUser}>Выйти</Nav.Link>
+                <Nav.Link onClick={isLoggedInAdmin ? handleLogoutAdmin : handleLogoutUser} as={Link} to="/login">Выйти</Nav.Link>
               </>
             ) : (
               <Nav.Link as={Link} to="/login">Вход</Nav.Link>

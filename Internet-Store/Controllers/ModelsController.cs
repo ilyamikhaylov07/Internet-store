@@ -133,6 +133,7 @@ namespace Internet_Store.Controllers
             {
                 var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Id == int.Parse(id));
                 model.Colour = unfilteredmodel.Colour;
+                model.Id=unfilteredmodel.Id.ToString();
                 model.Name = unfilteredmodel.Name;
                 model.Price = unfilteredmodel.Price;
                 model.Brand = unfilteredmodel.Brand;

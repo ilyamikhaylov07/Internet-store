@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Profile from './Profile';
 import FilteredPage from './FilteredPage';
 import AdminDashboard from './AdminDashboard';
+import AdminProfile from './AdminPages/AdminProfile';
 import ModelPage from './ModelPage';
 import AdminAddNewModelPage from './AdminPages/AdminAddNewModel';
 
@@ -34,7 +35,6 @@ function App() {
   const handleLogoutAdmin = () => {
     localStorage.removeItem('accessToken');
     setIsLoggedInAdmin(false);
-    location.reload();
   };
 
   return (

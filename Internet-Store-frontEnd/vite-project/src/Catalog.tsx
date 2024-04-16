@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import CategoryFilterForm from './CategoryFIlterForm';
-import OnModelClick from './Api-function/OnModelClick';
 import { useNavigate } from 'react-router-dom';
 import {  useDispatch, useSelector } from 'react-redux';
 import {add} from './redux/IdModelSlice';
