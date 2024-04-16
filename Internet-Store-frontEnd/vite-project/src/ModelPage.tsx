@@ -5,11 +5,13 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import {add} from './redux/IdModelSlice';
+import { useAppDispatch } from './redux/Hooks';
 
 interface ModelData {
+    id:string;
     name: string;
     price: string;
-    category: string;
     image: string;
     colour: string;
     brand: string;
@@ -21,12 +23,12 @@ function ModelPage() {
     const [modelData, setModelData] = useState<ModelData | null>(null);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
     const location = useLocation();
-
+    const dispatch=useAppDispatch();
     useEffect(() => {
         const query = new URLSearchParams(location.search);
         const modelName = query.get('id');
 
-        // POST-запрос к API
+        // Запрос к API для получения информации о модели
         fetch(`https://localhost:7239/Internetstore/Models/GetModelInfo?id=${modelName}`, {
             method: 'POST',
             headers: {
@@ -42,6 +44,11 @@ function ModelPage() {
             });
     }, [location.search]);
 
+    // Обработчик выбора размера
+    const handleSizeSelection = (size: string) => {
+        setSelectedSize(size);
+    };
+
     if (!modelData) {
         return <div>Loading...</div>;
     }
@@ -52,7 +59,6 @@ function ModelPage() {
                 {/* Изображение продукта */}
                 <Col md={6} lg={6} style={{ padding: '5px' }}>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {/* Уменьшите изображение */}
                         <Image
                             src={`data:image/jpeg;base64,${modelData.image}`}
                             rounded
@@ -64,9 +70,7 @@ function ModelPage() {
                 {/* Информация о продукте */}
                 <Col md={6} lg={6} style={{ padding: '5px' }}>
                     <div>
-                        {/* Увеличьте размер шрифта */}
                         <h2 style={{ fontSize: '2rem', margin: '0' }}>{modelData.name}</h2>
-                        <h3 style={{ fontSize: '2rem', margin: '0' }}>Категория: {modelData.category}</h3>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Цена: {modelData.price}</p>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Цвет: {modelData.colour}</p>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Материалы: {modelData.materials}</p>
@@ -78,9 +82,8 @@ function ModelPage() {
                                 {modelData.sizes.map((size) => (
                                     <Button
                                         key={size}
-                                        variant={size === selectedSize ? 'primary' : 'secondary'}
-                                        onClick={() => setSelectedSize(size)}
-                                        style={{ marginRight: '5px' }}
+                                        variant={selectedSize === size ? 'primary' : 'secondary'}
+                                        onClick={() => handleSizeSelection(size)}
                                     >
                                         {size}
                                     </Button>
@@ -93,8 +96,9 @@ function ModelPage() {
                             variant="primary"
                             size="lg"
                             style={{ marginTop: '10px', fontSize: '1.25rem' }}
+                            onClick={()=>{if(selectedSize!=null) dispatch(add([modelData.id,selectedSize])) }}
                         >
-                            Купить
+                            Добавить в корзину
                         </Button>
                     </div>
                 </Col>

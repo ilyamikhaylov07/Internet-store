@@ -9,21 +9,11 @@ import { useEffect, useState } from 'react';
 import Profile from './Profile';
 import FilteredPage from './FilteredPage';
 import AdminDashboard from './AdminDashboard';
-import AdminProfile from './AdminPages/AdminProfile';
 import ModelPage from './ModelPage';
-
 function App(){
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const isUser = localStorage.getItem('isUser') === 'true';
-    return accessToken !== null && isUser;
-  });
-  
-  const [isLoggedInAdmin, setIsLoggedInAdmin] = useState(() => {
-    const accessToken = localStorage.getItem('accessToken');
-    const isAdmin = localStorage.getItem('isAdmin') === 'true';
-    return accessToken !== null && isAdmin;
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('accessToken') !== null);
+  const [isLoggedInAdmin, setIsLoggedInAdmin] = useState(localStorage.getItem('accessToken') !== null);
+
   const handleLogoutUser = () => {
     localStorage.removeItem('accessToken');
     setIsLoggedIn(false);
@@ -31,13 +21,14 @@ function App(){
   const handleLogoutAdmin = () => { // Функция для выхода администратора
     localStorage.removeItem('accessToken');
     setIsLoggedInAdmin(false);
+    location.reload();
   };
   
   return (
+    
       <Router>
       <MainBar isLoggedIn={isLoggedIn} handleLogoutUser={handleLogoutUser} isLoggedInAdmin={isLoggedInAdmin} handleLogoutAdmin={handleLogoutAdmin}/>
       <Routes>
-
         <Route path="/home" element={<HomePage/>} />
         <Route path="/login" element={<Registration setIsLoggedIn={setIsLoggedIn} setIsLoggedInAdmin={setIsLoggedInAdmin} />} />
         <Route path="/catalog" element={<CatalogPage/>}/>
@@ -45,14 +36,8 @@ function App(){
         <Route path="/catalog/filtered?" element={<FilteredPage/>}/>
         {isLoggedInAdmin && (
           <Route path="/admin-dashboard" element={<AdminDashboard />} /> 
-          
-        )}
-        {isLoggedInAdmin && (
-          <Route path="/profile-admin" element={<AdminProfile/>}/>
         )}
         <Route path="/catalog/id?" element={<ModelPage/>}/>
-        
-        
       </Routes>
     </Router>
   

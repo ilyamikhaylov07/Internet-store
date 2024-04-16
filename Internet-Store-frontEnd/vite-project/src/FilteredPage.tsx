@@ -5,21 +5,25 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import CategoryFilterForm from './CategoryFIlterForm';
+import OnModelClick from './Api-function/OnModelClick';
 import { useNavigate } from 'react-router-dom';
+import CategoryFilterForm from './CategoryFIlterForm';
+import {add} from './redux/IdModelSlice';
+import { useAppDispatch } from './redux/Hooks';
 
-function FilteredPage() {
+ function FilteredPage() {
     const navigate = useNavigate(); 
     const location = useLocation();
     interface Product {
-        id:string;
         name: string;
         price: string;
         image: string;
         sizes: string[];
+        id:string;
     }
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
+    const dispatch=useAppDispatch();
     useEffect(() => {
         const query = new URLSearchParams(location.search);
         let category = query.get('category');
@@ -54,16 +58,11 @@ function FilteredPage() {
                 [productIndex]: size
             }));
         };
-        const handleCategoryChange = (price: string) => {
-            // Ваша логика фильтрации по цене
-        };
-        const handlePriceChange = (minPrice:number,maxPrice:number) => {
-            // Ваша логика фильтрации по цене
-        };
+        
     return (
         <Row className="mt-5 justify-content-center my-2 gx-4">
             <Col xs={12} md={3} lg={2}>
-                <CategoryFilterForm onPriceChange={handlePriceChange} onCategoryChange={handleCategoryChange}/>
+                <CategoryFilterForm />
             </Col>
             <Col xs={12} md={9} lg={10}>
                 <Row className="gy-4" style={{ gap: '15px' }}>
@@ -78,13 +77,13 @@ function FilteredPage() {
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)'}
                                 onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
-                                onClick={() => navigate(`/catalog/id?id=${product.id}`)}
                             >
                                 <div style={{ maxHeight: '200px', overflow: 'hidden' }}>
                                     <Card.Img
                                         variant="top"
                                         src={`data:image/jpeg;base64,${product.image}`}
                                         style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                                        onClick={() => navigate(`/catalog/id?id=${product.id}`)}
                                     />
                                 </div>
                                 <Card.Body>
@@ -100,6 +99,7 @@ function FilteredPage() {
                                                     variant={selectedSizes[index] === size ? 'primary' : 'secondary'}
                                                     onClick={() => handleSizeSelection(index, size)}
                                                     style={{ marginRight: '5px' }}
+                                                    
                                                 >
                                                     {size}
                                                 </Button>
@@ -108,7 +108,7 @@ function FilteredPage() {
                                     </div>
 
                                     {/* Кнопка "Купить" */}
-                                    <Button variant="primary">Купить</Button>
+                                    <Button variant="primary" onClick={()=>{if(selectedSizes[index]!=null) dispatch(add([product.id,selectedSizes[index]])) }}>Добавить в корзину</Button>
                                 </Card.Body>
                             </Card>
                         </Col>

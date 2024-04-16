@@ -49,10 +49,7 @@ const handleChangeIsCheck = () => {
     
    const success = isChecked ? await adminApi(email1, password1,setValidated, setPassword ) : await loginApi(email1, password1, setValidated, setPassword);
    if(success){
-    localStorage.setItem('isAdmin', isChecked ? 'true' : 'false');
-    localStorage.setItem('isUser', isChecked ? 'false' : 'true')
     isChecked ? setIsLoggedInAdmin(true) : setIsLoggedIn(true); 
-
     if (isChecked) {
         history('/admin-dashboard'); // Перенаправляем администратора на страницу администратора
     } else {

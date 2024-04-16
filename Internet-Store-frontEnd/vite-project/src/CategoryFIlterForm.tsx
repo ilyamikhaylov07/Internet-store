@@ -1,24 +1,18 @@
+import React, { useState } from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
 
-
-function CategoryFilterForm({ onCategoryChange, onPriceChange }) {
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        // Запрос к API для получения списка категорий
-        fetch('https://localhost:7239/Internetstore/Models/GetCategories')
-            .then(res => res.json())
-            .then(data => {
-                setCategories(data);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
-    }, []);
-    
+function CategoryFilterForm() {
+    const categories = [
+        'Верхняя одежда',
+        'Брюки',
+        'Обувь',
+        'Джинсы',
+        'Футболки',
+        'Рубашки'
+    ];
     const navigate = useNavigate();
 
     // Состояния для отслеживания выбранной категории и диапазона цен
@@ -29,7 +23,7 @@ function CategoryFilterForm({ onCategoryChange, onPriceChange }) {
     // Обработчики изменения выбранной категории
     const handleCategorySelection = (category) => {
         setSelectedCategory(category);
-        onCategoryChange(category);
+        
     };
 
     // Обработчики изменения минимальной и максимальной цены
@@ -43,12 +37,13 @@ function CategoryFilterForm({ onCategoryChange, onPriceChange }) {
 
     // Обработчик применения фильтра
     const applyFilter = () => {
-        onPriceChange(minPrice, maxPrice);
+        
         const query = new URLSearchParams({
             category: selectedCategory,
             minPrice: minPrice.toString(),
             maxPrice:maxPrice.toString()
         }).toString();;
+        
         navigate(`/catalog/filtered?${query}`);
         location.reload();
         

@@ -5,21 +5,28 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import CategoryFilterForm from './CategoryFIlterForm';
+import OnModelClick from './Api-function/OnModelClick';
 import { useNavigate } from 'react-router-dom';
+import {  useDispatch, useSelector } from 'react-redux';
+import {add} from './redux/IdModelSlice';
+import { useAppDispatch } from './redux/Hooks';
+
 
 interface Product {
-    id:string;
     name: string;
     price: string;
     image: string;
     sizes: string[];
+    id:string;
 }
 
 function CatalogPage() {
+
     const [products, setProducts] = useState<Product[]>([]);
     const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
     const navigate = useNavigate(); 
 
+    const dispatch=useAppDispatch();
     useEffect(() => {
         fetch('https://localhost:7239/Internetstore/Models/ModelWithCatalog')
             .then(res => res.json())
@@ -33,23 +40,16 @@ function CatalogPage() {
         }));
     };
 
-    const handlePriceChange = (price: string) => {
-        // Ваша логика фильтрации по цене
-    };
-    const handleCategoryChange = (minPrice:number,maxPrice:number) => {
-        // Ваша логика фильтрации по цене
-    };
-
     return (
         <Row className="mt-5 justify-content-center my-2 gx-4">
             {/* Форма с категориями и фильтром по цене */}
             <Col xs={12} md={3} lg={2}>
-                <CategoryFilterForm onPriceChange={handlePriceChange} onCategoryChange={handleCategoryChange}/>
+                <CategoryFilterForm />
             </Col>
 
             {/* Карточки товаров */}
-            <Col xs={12} md={9} lg={10}>
-                <Row className="gy-4">
+            <Col xs={12} md={9} lg={8}>
+                <Row className="gy-4" style={{ }}>
                     {products.map((product, index) => (
                         <Col key={index} xs={12} md={6} lg={4} xl={3}>
                             <Card
@@ -61,13 +61,14 @@ function CatalogPage() {
                                 }}
                                 onMouseEnter={(e) => e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.1)'}
                                 onMouseLeave={(e) => e.currentTarget.style.boxShadow = 'none'}
-                                onClick={() => navigate(`/catalog/id?id=${product.id}`)}
+                                
                             >
                                 <div style={{ maxHeight: '200px', overflow: 'hidden' }}>
                                     <Card.Img
                                         variant="top"
                                         src={`data:image/jpeg;base64,${product.image}`}
                                         style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
+                                        onClick={() => navigate(`/catalog/id?id=${product.id}`)}
                                     />
                                 </div>
                                 <Card.Body>
@@ -91,7 +92,7 @@ function CatalogPage() {
                                     </div>
 
                                     {/* Кнопка "Купить" */}
-                                    <Button variant="primary">Купить</Button>
+                                    <Button variant="primary" onClick={()=>{if(selectedSizes[index]!=null) dispatch(add([product.id,selectedSizes[index]])) }}>Добавить в корзину</Button>
                                 </Card.Body>
                             </Card>
                         </Col>

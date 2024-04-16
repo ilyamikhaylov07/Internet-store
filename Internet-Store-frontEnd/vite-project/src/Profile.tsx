@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
-import { Card, Row, Col, Button, Form } from 'react-bootstrap';
+import { Card, Row, Col, Button } from 'react-bootstrap';
 
 interface User {
   name: string;
@@ -13,8 +13,6 @@ interface User {
 function Profile() {
   const history = useNavigate();
   const [user, setUser] = useState<User | null>(null);
-  const [isEditingPhoneNumber, setIsEditingPhoneNumber] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -35,45 +33,12 @@ function Profile() {
         }
         return res.json();
       })
-      .then(data => {
-        setUser(data);
-        setPhoneNumber(data.numberPhone); // Установка начального значения номера телефона
-      })
+      .then(data => setUser(data))
       .catch(error => {
         console.error('Fetch error:', error);
         // Обработка ошибки запроса, например, перенаправление на страницу входа
       });
   }, []);
-
-  const SaveNumberSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // Отправить запрос на сервер для обновления номера телефона
-    const token = localStorage.getItem('accessToken');
-    if (!token) {
-      history('login');
-      return;
-    }
-
-    fetch(`https://localhost:7239/Internetstore/Profile/UpdateNumberPhoneUser?numberphone=${phoneNumber}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ numberphone: phoneNumber })
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error('Failed to update number phone');
-        }
-        setIsEditingPhoneNumber(false); // Скрыть форму после успешного обновления
-      })
-      .catch(error => {
-        console.error('Update number phone error:', error);
-        // Обработка ошибки обновления номера телефона
-      });
-      location.reload();
-  };
 
   if (!user) {
     return <div>Loading...</div>;
@@ -93,27 +58,14 @@ function Profile() {
           <Card className="mx-auto mt-3" style={{ width: '100%' }}>
             <Card.Body>
               <Card.Title>Номер телефона:</Card.Title>
-              {isEditingPhoneNumber ? (
-                <Form onSubmit={SaveNumberSubmit}>
-                  <Form.Control
-                    type="text"
-                    value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
-                    required
-                  />
-                  <Button variant="primary" type="submit" >Сохранить</Button>
-                  <Button variant="secondary" onClick={() => setIsEditingPhoneNumber(false)}>Отмена</Button>
-                </Form>
-              ) : (
-                <Row>
-                  <Col xs={8}>
-                    <Card.Text>{user.numberPhone}</Card.Text>
-                  </Col>
-                  <Col xs={4}>
-                    <Button variant="primary" className="float-end" onClick={() => setIsEditingPhoneNumber(true)}>Изменить</Button>
-                  </Col>
-                </Row>
-              )}
+              <Row>
+                <Col xs={8}>
+                  <Card.Text>{user.numberPhone}</Card.Text>
+                </Col>
+                <Col xs={4}>
+                  <Button variant="primary" className="float-end">Добавить/Изменить</Button>
+                </Col>
+              </Row>
             </Card.Body>
           </Card>
 
