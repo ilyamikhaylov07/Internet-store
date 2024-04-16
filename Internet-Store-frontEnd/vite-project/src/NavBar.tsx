@@ -23,7 +23,7 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
             <Nav className="ms-auto">
             {isLoggedInAdmin && (
               <>
-                <Nav.Link as={Link} to="/admin-dashboard">Панель администратора</Nav.Link>
+                <Nav.Link as={Link} to="/admin-dashboard/add-product">Панель администратора</Nav.Link>
                 <Nav.Link as={Link} to="/profile-admin">Личный кабинет</Nav.Link>
               </>
             )}

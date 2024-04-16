@@ -72,7 +72,7 @@ function CatalogPage() {
                                 </div>
                                 <Card.Body>
                                     <Card.Title>{product.name}</Card.Title>
-                                    <Card.Text>Цена: {product.price}</Card.Text>
+                                    <Card.Text>Цена: {product.price} руб.</Card.Text>
 
                                     {/* Кнопки размеров */}
                                     <div style={{ marginBottom: '10px', maxWidth: '100%', overflowX: 'auto', scrollbarWidth: 'thin' }}>

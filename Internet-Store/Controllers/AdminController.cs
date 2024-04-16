@@ -35,7 +35,7 @@ namespace Internet_Store.Controllers
                             Otchestvo = admin.Otchestvo,
                             Email = admin.Email,
                             NumberPhone = admin.NumberPhone,
-        
+
                         });
                     }
                     else return BadRequest("Admin not exists");
@@ -44,13 +44,13 @@ namespace Internet_Store.Controllers
                 else return NotFound("Admin NotFound");
 
             }
-            
+
         }
-        [Authorize(AuthenticationSchemes ="Access", Roles = "Admin")]
+        [Authorize(AuthenticationSchemes = "Access", Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddModel(AddModelJson addModel)
         {
-            using(AppDbContext context = new AppDbContext())
+            using (AppDbContext context = new AppDbContext())
             {
                 var model = new Model()
                 {
@@ -66,14 +66,34 @@ namespace Internet_Store.Controllers
                         Size = s.Size,
                         Amount = s.Amount,
                     }).ToList()
-                
+
                 };
                 await context.Models.AddAsync(model);
                 await context.SaveChangesAsync();
-                return Ok();
+                return Ok("Товар успешно сохранился");
+            }
+        }
+        [Authorize(AuthenticationSchemes ="Access", Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> AddCategory(AddCategoryJson addCategory)
+        {
+            using (AppDbContext context = new AppDbContext())
+            {
+                var category = new Category()
+                {
+                    Title = addCategory.Title
+                };
+                var findcategory = await context.Categories.FirstOrDefaultAsync(t => t.Title == category.Title);
+                if (findcategory?.Title is null)
+                {
+                    await context.Categories.AddAsync(category);
+                    await context.SaveChangesAsync();
+                    return Ok("Категория успешно добавлена");
+                }
+                else return BadRequest("Такая категория уже существует");
 
             }
-            
+
         }
     }
 }

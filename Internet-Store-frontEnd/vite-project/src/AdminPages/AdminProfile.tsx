@@ -50,7 +50,7 @@ function AdminProfile() {
     <Container className="mt-5">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Image src="https://cdn.pixabay.com/photo/2016/10/26/22/02/dog-1772759_1280.jpg" style={{ width: '250px', height: '250px' }} roundedCircle /> {/* Изображение админа в правом верхнем углу */}
-        <Button variant="primary" onClick={() => history('/admin-dashboard')}>
+        <Button variant="primary" onClick={() => history('/admin-dashboard/add-product')}>
           Вернуться на панель администратора
         </Button>
       </div>

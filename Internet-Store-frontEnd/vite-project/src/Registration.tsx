@@ -54,7 +54,7 @@ const handleChangeIsCheck = () => {
     isChecked ? setIsLoggedInAdmin(true) : setIsLoggedIn(true); 
 
     if (isChecked) {
-        history('/admin-dashboard'); // Перенаправляем администратора на страницу администратора
+        history('/profile-admin'); // Перенаправляем администратора на страницу администратора
     } else {
         history('/catalog'); // Перенаправляем обычного пользователя на каталог
     }

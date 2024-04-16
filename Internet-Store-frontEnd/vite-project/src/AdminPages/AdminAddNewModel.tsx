@@ -28,7 +28,7 @@ function AdminAddNewModelPage() {
     const handleAddSizeAmountPair = () => {
         setFormData({
             ...formData,
-            modelWithSize: [...formData.modelWithSize, { Size: '', Amount: '' }],
+            modelWithSize: [...formData.modelWithSize, { size: '', amount: '' }],
         });
     };
 
@@ -65,7 +65,9 @@ function AdminAddNewModelPage() {
                 amount: pair.amount
             }))
             })
+            location.reload();
         } catch (error) {
+            alert('Ошибка при отправке данных:')
             console.error('Ошибка при отправке данных:', error);
         }
     };
@@ -79,6 +81,7 @@ function AdminAddNewModelPage() {
             <Form onSubmit={SaveHandler}>
                 <FloatingLabel controlId="Name" label="Название товара" className="mb-3">
                     <Form.Control
+                        required
                         style={{ width: '100%' }}
                         type="text"
                         name="name"
@@ -87,42 +90,54 @@ function AdminAddNewModelPage() {
                     />
                 </FloatingLabel>
                     <FloatingLabel controlId="Material" label="Материал" className="mb-3">
-                        <Form.Control style={{ width: '100%' }} 
+                        <Form.Control 
+                        required
+                        style={{ width: '100%' }} 
                         type="text"
                         name="material"
                         value={formData.materials}
                         onChange={(event) => setFormData({ ...formData, materials: event.target.value })}/>
                     </FloatingLabel>
                     <FloatingLabel controlId="Price" label="Цена товара, без указания валюты" className="mb-3">
-                        <Form.Control  style={{ width: '100%' }}
+                        <Form.Control  
+                        required
+                        style={{ width: '100%' }}
                         type="text"
                         name="price"
                         value={formData.price}
                         onChange={(event) => setFormData({ ...formData, price: event.target.value })} />
                     </FloatingLabel>
                     <FloatingLabel controlId="Colour" label="Цвет товара" className="mb-3">
-                        <Form.Control style={{ width: '100%' }} 
+                        <Form.Control 
+                        required
+                        style={{ width: '100%' }} 
                         type="text"
                         name="colour"
                         value={formData.colour}
                         onChange={(event) => setFormData({ ...formData, colour: event.target.value })}/>
                     </FloatingLabel>
                     <FloatingLabel controlId="Brand" label="Название бренда" className="mb-3">
-                        <Form.Control  style={{ width: '100%' }} 
+                        <Form.Control  
+                        required
+                        style={{ width: '100%' }} 
                         type="text"
                         name="brand"
                         value={formData.brand}
                         onChange={(event) => setFormData({ ...formData, brand: event.target.value })}/>
                     </FloatingLabel>
                     <FloatingLabel controlId="Image" label="Название картинки с указанием расширения" className="mb-3">
-                        <Form.Control style={{ width: '100%' }} 
+                        <Form.Control 
+                        required
+                        style={{ width: '100%' }} 
                         type="text"
                         name="image"
                         value={formData.image_url}
                         onChange={(event) => setFormData({ ...formData, image_url: event.target.value })}/>
                     </FloatingLabel>
                     <FloatingLabel controlId="Category" label="Id категории товара" className="mb-3">
-                        <Form.Control  style={{ width: '100%' }} 
+                        <Form.Control  
+                        required
+                        style={{ width: '100%' }} 
                         type="text"
                         name="category"
                         value={formData.category_id}
@@ -132,6 +147,7 @@ function AdminAddNewModelPage() {
                     <div key={index}>
                         <FloatingLabel controlId={`Size-${index}`} label={`Размер ${index + 1}`} className="mb-3">
                             <Form.Control
+                                required
                                 type="text"
                                 name="size"
                                 value={pair.size}
@@ -140,6 +156,7 @@ function AdminAddNewModelPage() {
                         </FloatingLabel>
                         <FloatingLabel controlId={`Amount-${index}`} label={`Количество ${index + 1}`} className="mb-3">
                             <Form.Control
+                                required
                                 type="text"
                                 name="amount"
                                 value={pair.amount}
@@ -157,7 +174,7 @@ function AdminAddNewModelPage() {
                     Добавить размер и количество
                 </Button>
 
-                <Button type="submit" className="mt-3" onClick={SaveHandler}>
+                <Button type="submit" style={{marginLeft: '440px'}} onClick={SaveHandler}>
                     Сохранить
                 </Button>
             </Form>

@@ -11,6 +11,7 @@ import AdminDashboard from './AdminDashboard';
 import AdminProfile from './AdminPages/AdminProfile';
 import ModelPage from './ModelPage';
 import AdminAddNewModelPage from './AdminPages/AdminAddNewModel';
+import AdminAddNewCategoryPage from './AdminPages/AdminAddNewCategory';
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -54,6 +55,7 @@ function App() {
         {isLoggedInAdmin && <Route path="/admin-dashboard/*" element={<AdminDashboard selectedTab={selectedTab} setSelectedTab={setSelectedTab} />} />}
         {isLoggedInAdmin && <Route path="/profile-admin" element={<AdminProfile />} />}
         {isLoggedInAdmin && <Route path="/admin-dashboard/add-product" element={<AdminAddNewModelPage />} />}
+        {isLoggedInAdmin && <Route path="/admin-dashboard/add-category" element={<AdminAddNewCategoryPage />} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
       </Routes>
     </Router>
