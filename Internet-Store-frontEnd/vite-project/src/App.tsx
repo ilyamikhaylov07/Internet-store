@@ -11,10 +11,14 @@ import AdminDashboard from './AdminDashboard';
 import AdminProfile from './AdminPages/AdminProfile';
 import ModelPage from './ModelPage';
 import AdminAddNewModelPage from './AdminPages/AdminAddNewModel';
+import Cart from './Cart';
+import { useAppDispatch } from './redux/Hooks';
+import { clearstorage } from './redux/IdModelSlice';
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
-
+  const dispatch=useAppDispatch();
+  
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     const accessToken = localStorage.getItem('accessToken');
     const isUser = localStorage.getItem('isUser') === 'true';
@@ -28,12 +32,12 @@ function App() {
   });
 
   const handleLogoutUser = () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
     setIsLoggedIn(false);
   };
 
   const handleLogoutAdmin = () => {
-    localStorage.removeItem('accessToken');
+    localStorage.removeItem("accessToken");
     setIsLoggedInAdmin(false);
   };
 
@@ -55,6 +59,7 @@ function App() {
         {isLoggedInAdmin && <Route path="/profile-admin" element={<AdminProfile />} />}
         {isLoggedInAdmin && <Route path="/admin-dashboard/add-product" element={<AdminAddNewModelPage />} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
+        <Route path="/cart" element={<Cart/>}/>
       </Routes>
     </Router>
   );
