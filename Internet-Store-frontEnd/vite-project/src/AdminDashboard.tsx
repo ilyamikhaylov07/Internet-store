@@ -11,7 +11,7 @@ function AdminDashboard({ selectedTab, setSelectedTab }) {
   };
 
   return (
-    <div style={{marginTop: '100px', width: '200px', float: 'left' }}>
+    <div style={{marginTop: '150px', width: '325px', float: 'left' }}>
       <ListGroup activeKey={selectedTab}>
         <ListGroup.Item
           action
@@ -19,7 +19,7 @@ function AdminDashboard({ selectedTab, setSelectedTab }) {
           to="/admin-dashboard/add-product"
           eventKey="/admin-dashboard/add-product"
           onClick={() => handleTabClick('/admin-dashboard/add-product')}
-          active={location.pathname === '/admin-dashboard/add-product'}
+          active={location.pathname === '/admin-dashboard/add-product' || location.pathname === '/admin-dashboard'}
         >
           Добавление нового товара
         </ListGroup.Item>
