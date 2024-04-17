@@ -18,18 +18,18 @@ export const IdContainerSlice = createSlice({
       state.IdContainer.push(actions.payload);
     },
     remove: (state,actions:PayloadAction<[string,string]>) => {
-      var index = state.IdContainer.indexOf(actions.payload);
-      if (index !== -1) {
-        state.IdContainer.splice(index, 1);
-      }
+      const indexToRemove = state.IdContainer.findIndex(item => item[0] === actions.payload[0] && item[1] === actions.payload[1]);
+
+    if (indexToRemove !== -1) {
+    state.IdContainer.splice(indexToRemove, 1);}
     },
-    copytostarage:(state)=>{
-        
+    clearstorage:(state)=>{
+      state.IdContainer.splice(0, state.IdContainer.length);
     }
 
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { add, remove} = IdContainerSlice.actions
+export const { add, remove,clearstorage} = IdContainerSlice.actions
 export default IdContainerSlice.reducer

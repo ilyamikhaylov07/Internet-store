@@ -59,12 +59,12 @@ import { useAppDispatch } from './redux/Hooks';
         };
         
     return (
-        <Row className="mt-5 justify-content-center my-2 gx-4">
+        <Row className="mt-5 justify-content-center my-2 gx-4" style={{marginLeft:'119px'}}>
             <Col xs={12} md={3} lg={2}>
                 <CategoryFilterForm />
             </Col>
-            <Col xs={12} md={9} lg={10}>
-                <Row className="gy-4" style={{ gap: '15px' }}>
+            <Col xs={12} md={10} lg={10} style={{paddingLeft:"60px"}}>
+                <Row className="gy-4" style={{ gap: '10px' }}>
                     {products.map((product, index) => (
                         <Col key={index} xs={12} md={6} lg={4} xl={3}>
                             <Card

@@ -47,7 +47,7 @@ function CatalogPage() {
             </Col>
 
             {/* Карточки товаров */}
-            <Col xs={12} md={9} lg={8}>
+            <Col xs={12} md={9} lg={8} style={{paddingLeft:"40px"}}>
                 <Row className="gy-4" style={{ }}>
                     {products.map((product, index) => (
                         <Col key={index} xs={12} md={6} lg={4} xl={3}>

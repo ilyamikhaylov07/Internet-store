@@ -1,6 +1,6 @@
-﻿using Internet_Store.ApiJsonResponse;
+﻿using Internet_Store.ApiJson;
+using Internet_Store.ApiJsonResponse;
 using Internet_Store.ModelFactories;
-using Internet_Store.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -45,7 +45,7 @@ namespace Internet_Store.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                return BadRequest();
             }
 
 
@@ -62,16 +62,16 @@ namespace Internet_Store.Controllers
                     List<ResponseModelWithCatalog> cardmodels = new List<ResponseModelWithCatalog>();
                     var allmodeles = await context.Models.ToListAsync();
                     List<Models.Model> models = new List<Models.Model>();
-                    foreach(var model_ in allmodeles)
+                    foreach (var model_ in allmodeles)
                     {
-                        if(int.Parse(model_.Price)>=int.Parse(filters.From) && int.Parse(model_.Price) <= int.Parse(filters.To))
+                        if (int.Parse(model_.Price) >= int.Parse(filters.From) && int.Parse(model_.Price) <= int.Parse(filters.To))
                         {
                             models.Add(model_);
                         }
                     }
                     foreach (Models.Model model in models)
                     {
-                        var modelWithSize = await context.ModelWithSizes.Where(m => m.ModelId == model.Id).ToListAsync();
+                        var modelWithSize = await context.ModelWithSizes.Where(m => m.ModelId == model.Id && m.Amount > 0).ToListAsync();
                         List<string> sizes = new List<string>();
                         foreach (var modelwithsizes in modelWithSize)
                         {
@@ -84,7 +84,7 @@ namespace Internet_Store.Controllers
                             Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", model.Image_url)),
                             Price = model.Price,
                             Sizes = sizes,
-                            Id=model.Id.ToString()
+                            Id = model.Id.ToString()
                         });
                     }
                     return cardmodels;
@@ -96,15 +96,15 @@ namespace Internet_Store.Controllers
                     List<Models.Model> models = new List<Models.Model>();
                     foreach (var model_ in allmodeles)
                     {
-                        if (int.Parse(model_.Price) >= int.Parse(filters.From) && int.Parse(model_.Price) <= int.Parse(filters.To) && 
-                            context.Categories.FirstOrDefault(m => m.Id==model_.CategoryId).Title==filters.Categorie)
+                        if (int.Parse(model_.Price) >= int.Parse(filters.From) && int.Parse(model_.Price) <= int.Parse(filters.To) &&
+                            context.Categories.FirstOrDefault(m => m.Id == model_.CategoryId).Title == filters.Categorie)
                         {
                             models.Add(model_);
                         }
                     }
                     foreach (Models.Model model in models)
                     {
-                        var modelWithSize = await context.ModelWithSizes.Where(m => m.ModelId == model.Id).ToListAsync();
+                        var modelWithSize = await context.ModelWithSizes.Where(m => m.ModelId == model.Id && m.Amount > 0).ToListAsync();
                         List<string> sizes = new List<string>();
                         foreach (var modelwithsizes in modelWithSize)
                         {
@@ -133,11 +133,11 @@ namespace Internet_Store.Controllers
             {
                 var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Id == int.Parse(id));
                 model.Colour = unfilteredmodel.Colour;
-                model.Id=unfilteredmodel.Id.ToString();
+                model.Id = unfilteredmodel.Id.ToString();
                 model.Name = unfilteredmodel.Name;
                 model.Price = unfilteredmodel.Price;
                 model.Brand = unfilteredmodel.Brand;
-                model.Category=db.Categories.First(c=> c.Id==unfilteredmodel.CategoryId).Title;
+                model.Category = db.Categories.First(c => c.Id == unfilteredmodel.CategoryId).Title;
                 model.Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", unfilteredmodel.Image_url));
                 model.Materials = unfilteredmodel.Materials;
                 var modelWithSize = await db.ModelWithSizes.Where(m => m.ModelId == unfilteredmodel.Id).ToListAsync();
@@ -157,7 +157,29 @@ namespace Internet_Store.Controllers
         {
             using (AppDbContext db = new AppDbContext())
             {
-                return await db.Categories.Select(c=>c.Title).ToListAsync();
+                return await db.Categories.Select(c => c.Title).ToListAsync();
+            }
+        }
+        [HttpPost]
+        public async Task<ResponseCartModels> GetCardModelsByIdSize(ModelIdSize ModelInfo)
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                ResponseCartModels responseCartModels = new ResponseCartModels();
+                var unfilteredmodel = await db.Models.FirstOrDefaultAsync(m => m.Id == db.ModelWithSizes.FirstOrDefault(
+                    ms => ms.ModelId.ToString() == ModelInfo.Id && ms.Size == ModelInfo.Size && ms.Amount > 0).ModelId);
+                if (unfilteredmodel != null)
+                {
+                    responseCartModels.Brand = unfilteredmodel.Brand;
+                    responseCartModels.Id = unfilteredmodel.Id.ToString();
+                    responseCartModels.Price = unfilteredmodel.Price;
+                    responseCartModels.Materials = unfilteredmodel.Materials;
+                    responseCartModels.Size = ModelInfo.Size;
+                    responseCartModels.Name = unfilteredmodel.Name;
+                    responseCartModels.Image = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", unfilteredmodel.Image_url));
+                }
+                return responseCartModels;
+
             }
         }
 
