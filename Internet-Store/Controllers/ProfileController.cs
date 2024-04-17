@@ -73,5 +73,59 @@ namespace Internet_Store.Controllers
 
         }
 
+        [Authorize(AuthenticationSchemes = "Access", Roles = "User")]
+        [HttpGet]
+
+        public async Task<IActionResult> GetOrdersUser()
+        {
+            using (AppDbContext context = new AppDbContext())
+            {
+                var user_email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                if (user_email == null)
+                {
+                    return NotFound("User not found");
+                }
+
+                var user = await context.Users.FirstOrDefaultAsync(u => u.Email == user_email);
+                if (user == null)
+                {
+                    return BadRequest("User not exists");
+                }
+
+                var orders = await context.Orders
+                                          .Where(o => o.UserId == user.Id)
+                                          .Include(o => o.Items)
+                                            .ThenInclude(i => i.ModelWithSize)
+                                            .ThenInclude(mws => mws.Model)
+                                          .ToListAsync();
+
+                if (!orders.Any())
+                {
+                    return Ok("No orders found");
+                }
+                var result = orders.Select(order => new
+                {
+                    order.Price,
+                    order.PriceWithDelivery,
+                    order.City,
+                    order.Street,
+                    order.House,
+                    order.Index,
+                    order.State,
+                    Models = order.Items.Select(i => new
+                    {
+                        ModelName = i.ModelWithSize.Model.Name,
+                        ModelSize = i.ModelWithSize.Size,
+                        ModelColor = i.ModelWithSize.Model.Colour,
+                        ModelPrice = i.ModelWithSize.Model.Price,
+                        ModelImageUrl = i.ModelWithSize.Model.Image_url
+                    }).ToList()
+                });
+
+                return Ok(result);
+
+            }
+        }
+
     }
 }

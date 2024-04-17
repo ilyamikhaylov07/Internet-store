@@ -11,7 +11,7 @@ function AdminDashboard({ selectedTab, setSelectedTab }) {
   };
 
   return (
-    <div style={{marginTop: '150px', width: '325px', float: 'left' }}>
+    <div style={{marginTop: '150px',marginLeft:'150px' ,width: '325px', float: 'left' }}>
       <ListGroup activeKey={selectedTab}>
         <ListGroup.Item
           action
