@@ -15,8 +15,12 @@ import Cart from './Cart';
 import { useAppDispatch } from './redux/Hooks';
 import { clearstorage } from './redux/IdModelSlice';
 import AdminAddNewCategoryPage from './AdminPages/AdminAddNewCategory';
+<<<<<<< HEAD
 import FAQPage from './FAQ';
 import AboutPage from './About';
+=======
+import Order from './Order';
+>>>>>>> 5a727aaf1e9ff55892d5aab5f6b343c26408e6ef
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -66,6 +70,7 @@ function App() {
         {isLoggedInAdmin && <Route path="/admin-dashboard/add-category" element={<AdminAddNewCategoryPage />} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
         <Route path="/cart" element={<Cart/>}/>
+        {isLoggedIn && <Route path="/cart/order?" element={<Order />} />}
       </Routes>
     </Router>
   );

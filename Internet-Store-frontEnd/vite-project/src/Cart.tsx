@@ -4,7 +4,7 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "./redux/Hooks";
 import axios from "axios";
-import { remove } from "./redux/IdModelSlice";
+import { clearstorage, remove } from "./redux/IdModelSlice";
 
 interface Product {
   brand: string;
@@ -72,8 +72,15 @@ function Cart() {
   };
 
   return (
+    
     <Row className="mt-5 justify-content-center my-2 gx-4" style={{ width: "100%" }}>
+      
       <Col xs={12} md={9} lg={10}>
+      <h1 style={{marginBottom:"15px"}}>Корзина</h1>
+      <Button style={{paddingBottom:"10px",marginBottom:"15px"}} variant="outline-danger" onClick={()=>{
+        dispatch(clearstorage());
+        location.reload();
+      }}>Удалить все товары</Button>
         <Row>
           <Col xs={12} md={9} lg={8}>
             {products.map((product, index) => (
@@ -116,7 +123,10 @@ function Cart() {
                 <p>{totalPrice} руб.</p>
                 <h4>Количество товаров:</h4>
                 <p>{products.length}</p>
-                <Button style={{paddingBottom:"10px",marginTop:"57px"}} variant="success">Оформить заказ</Button>
+                <Button style={{paddingBottom:"10px",marginTop:"57px"}} variant="success" onClick={()=>{
+                  const query = new URLSearchParams({
+                    sum: totalPrice.toString()
+                }).toString(); navigate(`/cart/order?${query}`)}}>Оформить заказ</Button>
               </Card.Body>
             </Card>
           </Col>
