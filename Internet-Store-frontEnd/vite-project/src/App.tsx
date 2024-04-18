@@ -38,11 +38,13 @@ function App() {
   const handleLogoutUser = () => {
     localStorage.removeItem("accessToken");
     setIsLoggedIn(false);
+    dispatch(clearstorage())
   };
 
   const handleLogoutAdmin = () => {
     localStorage.removeItem("accessToken");
     setIsLoggedInAdmin(false);
+    dispatch(clearstorage())
   };
 
   return (

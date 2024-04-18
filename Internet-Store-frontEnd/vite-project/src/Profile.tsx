@@ -103,7 +103,7 @@ function Profile() {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div style={{paddingBlock:'500px'}}>Loading...</div>;
   }
 
   return (

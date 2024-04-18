@@ -20,8 +20,6 @@ async function registrationApi(name, email, password, setValidated, setPassword,
 
     const data = await response.json();
 
-    // Сохраняем токен в Local Storage
-    localStorage.setItem('accessToken', data.accessToken);
 
     setValidated(true);
     setPassword('');
@@ -31,7 +29,7 @@ async function registrationApi(name, email, password, setValidated, setPassword,
   } catch (error) {
     setValidated(true);
     setPasswordsMatch(false);
-    alert(error.message);
+    
   }
 }
 export default registrationApi
