@@ -17,7 +17,6 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
             <Nav.Link as={Link} to="/blog">Блог</Nav.Link>
             <Nav.Link as={Link} to="/about">О нас</Nav.Link>
             <Nav.Link as={Link} to="/FAQ">FAQ</Nav.Link>
-            <Nav.Link as={Link} to="/delivery-and-payment">Доставка и оплата</Nav.Link>
             {/* Страницы для администратора */}
             </Nav>
             <Nav className="ms-auto">
