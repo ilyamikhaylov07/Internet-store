@@ -73,7 +73,52 @@ namespace Internet_Store.Controllers
                 return Ok("Товар успешно сохранился");
             }
         }
-        [Authorize(AuthenticationSchemes ="Access", Roles = "Admin")]
+
+        [Authorize(AuthenticationSchemes = "Access", Roles = "Admin")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ResponseAllOrders>>> GetAllOrders()
+        {
+            using (AppDbContext context = new AppDbContext())
+            {
+                List<ResponseAllOrders> order = new List<ResponseAllOrders>();
+                var orders = await context.Orders.ToListAsync();
+                foreach (var o in orders)
+                {
+                    order.Add(new ResponseAllOrders
+                    {
+                        Id = o.Id,
+                        Price = o.Price,
+                        PriceWithDelivery = o.PriceWithDelivery,
+                        City = o.City,
+                        Street = o.Street,
+                        House = o.House,
+                        Index = o.Index,
+                        State = o.State,
+                        UserId = o.UserId,
+                    });
+                    
+                }
+                if(order.Count < 1) return Ok("Заказов нет"); 
+                return Ok(order);
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = "Access", Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateState(string state, int orderId)
+        {
+            using (AppDbContext context = new AppDbContext())
+            {
+                var order = await context.Orders.Where(o => o.Id == orderId).FirstOrDefaultAsync();
+                if (order == null) return BadRequest("Такого заказа не существует");
+                order.State = state;
+                await context.SaveChangesAsync();
+
+                return Ok("Статус заказа изменён");
+            }
+        }
+
+        [Authorize(AuthenticationSchemes = "Access", Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddCategory(AddCategoryJson addCategory)
         {

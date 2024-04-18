@@ -114,7 +114,7 @@ function ModelPage() {
                 <Col md={6} lg={6} style={{ padding: '5px' }}>
                     <div>
                         <h2 style={{ fontSize: '2rem', margin: '0' }}>{modelData.name}</h2>
-                        <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Цена: {modelData.price}</p>
+                        <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Цена: {modelData.price} руб.</p>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Цвет: {modelData.colour}</p>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Материалы: {modelData.materials}</p>
                         <p style={{ fontSize: '1.5rem', margin: '10px 0' }}>Бренд: {modelData.brand}</p>

@@ -18,6 +18,7 @@ import AdminAddNewCategoryPage from './AdminPages/AdminAddNewCategory';
 import FAQPage from './FAQ';
 import AboutPage from './About';
 import Order from './Order';
+import GetOrdersPage from './AdminPages/GetOrders';
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -67,6 +68,7 @@ function App() {
         {isLoggedInAdmin && <Route path="/profile-admin" element={<AdminProfile />} />}
         {isLoggedInAdmin && <Route path="/admin-dashboard/add-product" element={<AdminAddNewModelPage />} />}
         {isLoggedInAdmin && <Route path="/admin-dashboard/add-category" element={<AdminAddNewCategoryPage />} />}
+        {isLoggedInAdmin && <Route path="/admin-dashboard/get-orders" element={<GetOrdersPage/>} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
         <Route path="/cart" element={<Cart/>}/>
         {isLoggedIn && <Route path="/cart/order?" element={<Order />} />}

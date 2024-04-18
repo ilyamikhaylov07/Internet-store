@@ -33,6 +33,16 @@ function AdminDashboard({ selectedTab, setSelectedTab }) {
         >
           Добавление новой категории товара
         </ListGroup.Item>
+        <ListGroup.Item
+          action
+          as={Link}
+          to="/admin-dashboard/get-orders"
+          eventKey="/admin-dashboard/get-orders"
+          onClick={() => handleTabClick('/admin-dashboard/get-orders')}
+          active={location.pathname === '/admin-dashboard/get-orders'}
+        >
+          Заказы
+        </ListGroup.Item>
       </ListGroup>
     </div>
   );
