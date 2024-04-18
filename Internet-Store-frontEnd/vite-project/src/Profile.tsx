@@ -10,8 +10,28 @@ interface User {
   email: string;
 }
 
+interface Model {
+  modelName: string;
+  modelSize: string;
+  modelColor: string;
+  modelPrice: string;
+  modelImageUrl: string;
+}
+
+interface Order {
+  price: number;
+  priceWithDelivery: number;
+  city: string;
+  street: string;
+  house: string;
+  index: string;
+  state: string;
+  models: Model[];
+}
+
 function Profile() {
   const history = useNavigate();
+  const [orders, setOrders] = useState<Order[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [isEditingPhoneNumber, setIsEditingPhoneNumber] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -31,23 +51,31 @@ function Profile() {
     })
       .then(res => {
         if (!res.ok) {
-          throw new Error('Unauthorized'); // Обработка ошибки 401 Unauthorized
+          throw new Error('Unauthorized');
         }
         return res.json();
       })
       .then(data => {
         setUser(data);
-        setPhoneNumber(data.numberPhone); // Установка начального значения номера телефона
+        setPhoneNumber(data.numberPhone);
       })
       .catch(error => {
         console.error('Fetch error:', error);
-        // Обработка ошибки запроса, например, перенаправление на страницу входа
+      });
+
+    fetch('https://localhost:7239/Internetstore/Profile/GetOrdersUser', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(setOrders)
+      .catch(error => {
+        console.error('Fetch orders error:', error);
       });
   }, []);
 
   const SaveNumberSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Отправить запрос на сервер для обновления номера телефона
     const token = localStorage.getItem('accessToken');
     if (!token) {
       history('login');
@@ -66,13 +94,12 @@ function Profile() {
         if (!res.ok) {
           throw new Error('Failed to update number phone');
         }
-        setIsEditingPhoneNumber(false); // Скрыть форму после успешного обновления
+        setIsEditingPhoneNumber(false);
       })
       .catch(error => {
         console.error('Update number phone error:', error);
-        // Обработка ошибки обновления номера телефона
       });
-      location.reload();
+    location.reload();
   };
 
   if (!user) {
@@ -89,7 +116,6 @@ function Profile() {
               <Card.Text>{user.name}</Card.Text>
             </Card.Body>
           </Card>
-
           <Card className="mx-auto mt-3" style={{ width: '100%' }}>
             <Card.Body>
               <Card.Title>Номер телефона:</Card.Title>
@@ -101,7 +127,7 @@ function Profile() {
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     required
                   />
-                  <Button variant="primary" type="submit" >Сохранить</Button>
+                  <Button variant="primary" type="submit">Сохранить</Button>
                   <Button variant="secondary" onClick={() => setIsEditingPhoneNumber(false)}>Отмена</Button>
                 </Form>
               ) : (
@@ -116,15 +142,50 @@ function Profile() {
               )}
             </Card.Body>
           </Card>
-
           <Card className="mx-auto mt-3" style={{ width: '100%' }}>
             <Card.Body>
               <Card.Title>Email:</Card.Title>
               <Card.Text>{user.email}</Card.Text>
             </Card.Body>
           </Card>
-        </Col>
+          {orders.length > 0 && (
+            <div>
+              <h2 style={{paddingTop: '100px'}}>Ваши заказы:</h2>
+              {orders.map((order, index) => (
+                <Card key={index} className="mb-3">
+                  <Card.Body>
+                    <Card.Title>Заказ №{index + 1}</Card.Title>
+                    <Row>
+                      <Col md={8}>
+                        <Card.Text><strong>Цена: </strong>{order.price} руб.</Card.Text>
+                        <Card.Text><strong>Цена с доставкой: </strong> {order.priceWithDelivery} руб.</Card.Text>
+                        <Card.Text><strong>Город: </strong>{order.city}</Card.Text>
+                        <Card.Text><strong>Индекс: </strong>{order.index}</Card.Text>
+                        <Card.Text><strong>Статус заказа: </strong>{order.state}</Card.Text>
+                      </Col>
+                      
+                    </Row>
+                    <h5 style={{paddingTop:'50px'}}>Модели:</h5>
+                    {order.models.map((model, modelIndex) => (
+                      <Row key={modelIndex} className="mb-3">
+                        <Col md={8}>
+                          <p><strong>Наименование:</strong> {model.modelName}</p>
+                          <p><strong>Размер: </strong>{model.modelSize}</p>
+                          <p><strong>Цвет: </strong>{model.modelColor}</p>
+                        </Col>
+                        <Col md={4}>
+                          <Image src={`data:image/jpeg;base64,${model.modelImageUrl}`} thumbnail style={{ height: '100px' }} />
+                        </Col>
+                      </Row>
+                    ))}
 
+                    
+                  </Card.Body>
+                </Card>
+              ))}
+            </div>
+          )}
+        </Col>
         <Col xs={3} className="d-flex justify-content-end">
           <Image src="https://cdn.pixabay.com/photo/2016/10/26/22/02/dog-1772759_1280.jpg" style={{ width: '250px', height: '250px' }} roundedCircle />
         </Col>

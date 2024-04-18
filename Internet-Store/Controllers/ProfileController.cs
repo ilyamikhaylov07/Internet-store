@@ -101,7 +101,7 @@ namespace Internet_Store.Controllers
 
                 if (!orders.Any())
                 {
-                    return Ok("No orders found");
+                    return Ok("Заказы не найдены");
                 }
                 var result = orders.Select(order => new
                 {
@@ -118,7 +118,7 @@ namespace Internet_Store.Controllers
                         ModelSize = i.ModelWithSize.Size,
                         ModelColor = i.ModelWithSize.Model.Colour,
                         ModelPrice = i.ModelWithSize.Model.Price,
-                        ModelImageUrl = i.ModelWithSize.Model.Image_url
+                        ModelImageUrl = System.IO.File.ReadAllBytes(Path.Combine(Directory.GetCurrentDirectory(), "Images", i.ModelWithSize.Model.Image_url))
                     }).ToList()
                 });
 

@@ -15,12 +15,9 @@ import Cart from './Cart';
 import { useAppDispatch } from './redux/Hooks';
 import { clearstorage } from './redux/IdModelSlice';
 import AdminAddNewCategoryPage from './AdminPages/AdminAddNewCategory';
-<<<<<<< HEAD
 import FAQPage from './FAQ';
 import AboutPage from './About';
-=======
 import Order from './Order';
->>>>>>> 5a727aaf1e9ff55892d5aab5f6b343c26408e6ef
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
