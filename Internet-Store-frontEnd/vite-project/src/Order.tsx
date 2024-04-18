@@ -21,65 +21,65 @@ function Order(){
                 
                 <h1>Оформление заказа</h1>
                 <Form style={{marginTop:"20px"}}>
-                    <FloatingLabel controlId="Name" label="Город доставки" className="mb-3">
+                    <FloatingLabel controlId="City" label="Город доставки" className="mb-3">
                         <Form.Control
                             required
                             style={{ width: '100%' }}
                             type="text"
-                            name="name"
+                            name="City"
                         />
                     </FloatingLabel>
-                        <FloatingLabel controlId="Material" label="Улица доставка" className="mb-3">
+                        <FloatingLabel controlId="Street" label="Улица доставка" className="mb-3">
                             <Form.Control 
                             required
                             style={{ width: '100%' }} 
                             type="text"
-                            name="material"
+                            name="Street"
                             />
                         </FloatingLabel>
-                        <FloatingLabel controlId="Price" label="Дом" className="mb-3">
+                        <FloatingLabel controlId="House" label="Дом" className="mb-3">
                             <Form.Control  
                             required
                             style={{ width: '100%' }}
                             type="text"
-                            name="price"
+                            name="House"
                             />
                         </FloatingLabel>
-                        <FloatingLabel controlId="Colour" label="Индекс" className="mb-3">
+                        <FloatingLabel controlId="Index" label="Индекс" className="mb-3">
                             <Form.Control 
                             required
                             style={{ width: '100%' }} 
                             type="text"
-                            name="colour"
+                            name="Index"
                             />
                         </FloatingLabel>
-                        <FloatingLabel controlId="Colour" label="Сумма заказа" className="mb-3">
+                        <FloatingLabel controlId="PriceND" label="Сумма заказа" className="mb-3">
                             <Form.Control 
                             required
                             style={{ width: '100%' }} 
                             type="text"
-                            name="colour"
+                            name="PriceND"
                             disabled
                             value={`${sum} руб.`}
                             />
                         </FloatingLabel>
-                        <FloatingLabel controlId="Colour" label="Доставка" className="mb-3">
+                        <FloatingLabel controlId="DPrice" label="Доставка" className="mb-3">
                             <Form.Control 
                             required
                             style={{ width: '100%' }} 
                             type="text"
-                            name="colour"
+                            name="DPrice"
                             disabled
                             value={`1000 руб.`}
                             />
                         </FloatingLabel>
                         <strong>
-                        <FloatingLabel controlId="Colour" label="Итого" className="mb-3">
+                        <FloatingLabel controlId="Price" label="Итого" className="mb-3">
                             <Form.Control 
                             required
                             style={{ width: '100%' }} 
                             type="text"
-                            name="colour"
+                            name="Price"
                             disabled
                             value={ `${sumdil} руб.`}
                             />

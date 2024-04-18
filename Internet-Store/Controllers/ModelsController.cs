@@ -1,8 +1,11 @@
 ﻿using Internet_Store.ApiJson;
 using Internet_Store.ApiJsonResponse;
 using Internet_Store.ModelFactories;
+using Internet_Store.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace Internet_Store.Controllers
 {
@@ -180,6 +183,49 @@ namespace Internet_Store.Controllers
                 }
                 return responseCartModels;
 
+            }
+        }
+        [Authorize(AuthenticationSchemes = "Access", Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> MakeOrder(OrderInfo orderInfo)
+        {
+
+            using (AppDbContext db = new AppDbContext())
+            {
+                Order order=new Order();
+                order.Items=new List<Item>();
+                var user_email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Email == user_email);
+                for (int i = 0; i < orderInfo.Idies.Count(); i++)
+                {
+                    var modelws = await db.ModelWithSizes.FirstOrDefaultAsync(m => m.ModelId.ToString() == orderInfo.Idies[i] && m.Size == orderInfo.Sizes[i]);
+                    if (modelws.Amount > 0)
+                    {
+                        var item = db.Items.Add(new Item() { ModelWithSizeId = modelws.Id }).Entity;
+                        if (user != null)
+                        {
+                            order.Street=orderInfo.Street;
+                            order.City=orderInfo.City;
+                            order.Price=orderInfo.Price-1000;
+                            order.PriceWithDelivery = orderInfo.Price;
+                            order.House=orderInfo.House;
+                            order.Index=orderInfo.Index;
+                            order.User=user;
+                            order.Items.Add(item);
+                            order.State = "В обработке";
+                            order.WorkerId = 1;
+                        }
+                    }
+                    else
+                    {
+                        var model = await db.Models.FirstOrDefaultAsync(m => m.Id.ToString() == orderInfo.Idies[i]);
+                        return BadRequest($"Изивинте, товар {model.Name} с размером {modelws.Size} закончился, пожалуйста, удалите его из корзины");
+                        
+                    }
+                }
+                db.Orders.Add(order);
+                db.SaveChanges();
+                return Ok("Заказ успешно оформлен");
             }
         }
 

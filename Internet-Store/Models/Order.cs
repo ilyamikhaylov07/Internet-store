@@ -21,7 +21,7 @@ namespace Internet_Store.Models
         public User User { get; set; }
         [ForeignKey("WorkerId")]
         public int WorkerId { get; set; }
-        public Worker Worker { get; set; }
+        public Worker? Worker { get; set; }
         
         
     }
