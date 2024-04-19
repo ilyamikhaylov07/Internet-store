@@ -85,7 +85,7 @@ function ModelPage() {
             },{headers});
             console.log('Review posted:', response.data);
             setFormData('');
-            
+            window.location.reload()
             // Обновить реакции на странице, если нужно
         } catch (error) {
             console.error('Error posting review:', error);

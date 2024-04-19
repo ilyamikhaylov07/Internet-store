@@ -15,7 +15,7 @@ async function registrationApi(name, email, password, setValidated, setPassword,
     });
 
     if (!response.ok) {
-      throw new Error('Ошибка при регистрации');
+      alert("Пользователь с такой почтой уже существует")
     }
 
     const data = await response.json();
@@ -25,11 +25,11 @@ async function registrationApi(name, email, password, setValidated, setPassword,
     setPassword('');
     setConfirmPassword('');
     setPasswordsMatch(true);
-    alert('Ваша учетная запись была успешно создана. Теперь вы можете войти.');
+    window.location.reload();
   } catch (error) {
     setValidated(true);
     setPasswordsMatch(false);
-    
+    window.location.reload();
   }
 }
 export default registrationApi

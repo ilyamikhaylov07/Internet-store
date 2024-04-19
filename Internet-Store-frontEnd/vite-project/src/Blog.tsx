@@ -6,7 +6,7 @@ function Blog() {
         <>
             {/* Первая карточка */}
             <Card
-                style={{ margin: 'auto', marginTop: '20px', display: 'flex', flexDirection: 'row', marginLeft: '149px', marginRight: '149px' }}
+                style={{ margin: 'auto', marginTop: '100px', display: 'flex', flexDirection: 'row', marginLeft: '149px', marginRight: '149px' }}
                 onClick={() => window.open("https://www.alltime.ru/blog/?page=post&blog=watchblog&post_id=moda-v-odezhde-dlya-zhenshchin-na-leto-v-thisyear-godu-trendy-tsveta", "_blank")}
             >
                 <Card.Img src="https://img2.joyreactor.cc/pics/post/%D0%BD%D0%B5%D0%B3%D1%80-%D0%BA%D0%B0%D1%87%D0%B0%D0%BB%D0%BA%D0%B0-%D0%B4%D0%BB%D1%8F-%D0%BB%D0%BE%D1%85%D0%BE%D0%B2-%D0%BF%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D0%BA-%D0%B4%D0%BB%D1%8F-%D0%BF%D0%BE%D1%86%D0%B0%D0%BD%D0%BE%D0%B2-%D0%BF%D1%83%D1%85%D0%BE%D0%B2%D0%B8%D0%BA-2152940.png" 

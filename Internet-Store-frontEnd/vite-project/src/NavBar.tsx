@@ -9,7 +9,7 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
   return (
     <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand as={Link} to="/home">Главная</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">Главная</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">

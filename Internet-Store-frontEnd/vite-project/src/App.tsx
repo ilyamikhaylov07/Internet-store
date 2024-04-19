@@ -40,12 +40,14 @@ function App() {
   const handleLogoutUser = () => {
     localStorage.removeItem("accessToken");
     setIsLoggedIn(false);
+    localStorage.setItem('isUser', 'false')
     dispatch(clearstorage())
   };
 
   const handleLogoutAdmin = () => {
     localStorage.removeItem("accessToken");
     setIsLoggedInAdmin(false);
+    localStorage.setItem('isAdmin', 'false')
     dispatch(clearstorage())
   };
 
@@ -58,7 +60,7 @@ function App() {
         handleLogoutAdmin={handleLogoutAdmin}
       />
       <Routes>
-        <Route path="/home" element={<HomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Registration setIsLoggedIn={setIsLoggedIn} setIsLoggedInAdmin={setIsLoggedInAdmin} />} />
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="FAQ" element={<FAQPage/>}/>

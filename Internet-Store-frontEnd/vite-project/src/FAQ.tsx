@@ -3,7 +3,7 @@ import { Accordion } from "react-bootstrap"
 function FAQPage(){
     return(
         <>
-        <h1><p style={{marginTop: '110px', marginLeft:'149px'}}>FAQ</p></h1>
+        <h1><p style={{marginTop: '70px', marginLeft:'149px'}}>FAQ</p></h1>
         <Accordion style={{marginTop:'10px', marginLeft:'149px', marginRight:'149px'}} defaultActiveKey={['0']} alwaysOpen>
       <Accordion.Item eventKey="0">
         <Accordion.Header><strong>Как выбрать правильный размер?</strong></Accordion.Header>

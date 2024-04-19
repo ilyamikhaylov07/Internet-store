@@ -4,8 +4,8 @@ import Image from 'react-bootstrap/Image';
 function AboutPage() {
     return (
         <>
-            <div style={{ marginTop: '110px', marginLeft: '149px', marginRight: '149px' }}>
-                <h2><strong>О нас</strong></h2>
+            <div style={{ marginTop: '65px', marginLeft: '149px', marginRight: '149px' }}>
+                <h1>О нас</h1>
                 <p>Мы - команда энтузиастов, объединенных любовью к моде и стремлением создавать уникальные и стильные образы для наших клиентов. Наш интернет-магазин предлагает широкий ассортимент одежды высокого качества от ведущих мировых брендов.</p>
 
                 <h3>Наше видение</h3>
@@ -50,10 +50,7 @@ function AboutPage() {
                 </ul>
                 <Container>
                     <Row style={{paddingBottom:'10px'}}>
-                        <Col xs={12} md={8}>
-
-                        </Col>
-                        <Col xs={12} md={4}>
+                        <Col >
                             <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhILGTkzb_dAeAbyq-MF9cg3zBbSOVrfbdgRGMhO7eMQ&s" rounded />
                         </Col>
                     </Row>
