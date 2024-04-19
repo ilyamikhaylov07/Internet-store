@@ -164,7 +164,7 @@ function Order() {
                     Банковской картой
                 </Button>
                 <br />
-                <Button variant="primary" style={{ marginTop: '20px', width: '200px', height: '50px', fontSize: '1.2rem' }} onClick={()=>{ApllyForm}}>
+                <Button variant="primary" style={{ marginTop: '20px', width: '200px', height: '50px', fontSize: '1.2rem' }} onClick={()=>{ApllyForm()}}>
                     Оформить
                 </Button>
             </Form>
