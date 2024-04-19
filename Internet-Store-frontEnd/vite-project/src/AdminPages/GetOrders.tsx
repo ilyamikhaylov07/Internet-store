@@ -46,9 +46,9 @@ function GetOrdersPage() {
     return (
         <>
             <AdminDashboard selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-            <div className="container mt-5">
-                <h1>Orders</h1>
-                <Table striped bordered hover>
+            <div  className="container mt-5">
+                <h1 style={{ marginTop:'100px'}}>Заказы</h1>
+                <Table style={{width:'270px'}} striped bordered hover>
                     <thead>
                         <tr>
                             <th>ID</th>
