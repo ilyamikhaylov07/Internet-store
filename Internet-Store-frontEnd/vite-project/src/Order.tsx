@@ -1,11 +1,14 @@
 import { Button, FloatingLabel, Form } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useAppSelector } from "./redux/Hooks";
+import { useAppDispatch, useAppSelector } from "./redux/Hooks";
+import { useNavigate } from "react-router-dom";
+import { clearstorage } from "./redux/IdModelSlice";
 
 function Order() {
     const [paymentMethod, setPaymentMethod] = useState(null);
-
+    const navigate = useNavigate();
+    const dispatch=useAppDispatch();
     // Определение интерфейса OrderData
     interface OrderData {
         city: string;
@@ -60,6 +63,9 @@ function Order() {
             'Authorization': `Bearer ${token}`};
             const response = await axios.post('https://localhost:7239/Internetstore/Models/MakeOrder', formData,{headers});
             alert(response.data)
+            dispatch(clearstorage())
+            navigate("/profile");
+
         } catch (error) {
             console.error('Error making order:', error);
         }

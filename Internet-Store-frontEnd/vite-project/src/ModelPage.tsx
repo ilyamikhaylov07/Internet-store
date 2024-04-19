@@ -5,11 +5,13 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import {add} from './redux/IdModelSlice';
+import { add } from './redux/IdModelSlice';
 import { useAppDispatch } from './redux/Hooks';
+import { Card, FloatingLabel, Form } from 'react-bootstrap';
+import axios from 'axios';
 
 interface ModelData {
-    id:string;
+    id: string;
     name: string;
     price: string;
     image: string;
@@ -19,16 +21,24 @@ interface ModelData {
     sizes: string[];
 }
 
+interface Reaction {
+    name: string;
+    text: string;
+}
+
 function ModelPage() {
     const [modelData, setModelData] = useState<ModelData | null>(null);
     const [selectedSize, setSelectedSize] = useState<string | null>(null);
+    const [reactions, setReactions] = useState<Reaction[]>([]);
     const location = useLocation();
-    const dispatch=useAppDispatch();
+    const dispatch = useAppDispatch();
+    const [formData, setFormData] = useState<string>('');
+
     useEffect(() => {
         const query = new URLSearchParams(location.search);
         const modelName = query.get('id');
 
-        // Запрос к API для получения информации о модели
+        // Получение данных о модели
         fetch(`https://localhost:7239/Internetstore/Models/GetModelInfo?id=${modelName}`, {
             method: 'POST',
             headers: {
@@ -42,11 +52,44 @@ function ModelPage() {
             .catch(error => {
                 console.error('Error fetching model data:', error);
             });
+
+        // Получение реакций на модель
+        fetch(`https://localhost:7239/Internetstore/Models/GetReactionsForModel?modelId=${modelName}`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                setReactions(data);
+            })
+            .catch(error => {
+                console.error('Error fetching reactions:', error);
+            });
     }, [location.search]);
 
     // Обработчик выбора размера
     const handleSizeSelection = (size: string) => {
         setSelectedSize(size);
+    };
+
+    const handleLeaveReview = async () => {
+        try {
+            const token=localStorage.getItem('accessToken');
+            const headers={'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`};
+            const response = await axios.post('https://localhost:7239/Internetstore/Models/PostReaction', {
+                text: formData,
+                modelId: modelData?.id,
+            },{headers});
+            console.log('Review posted:', response.data);
+            setFormData('');
+            
+            // Обновить реакции на странице, если нужно
+        } catch (error) {
+            console.error('Error posting review:', error);
+        }
     };
 
     if (!modelData) {
@@ -96,15 +139,47 @@ function ModelPage() {
                             variant="primary"
                             size="lg"
                             style={{ marginTop: '10px', fontSize: '1.25rem' }}
-                            onClick={()=>{if(selectedSize!=null) dispatch(add([modelData.id,selectedSize])) }}
+                            onClick={() => { if (selectedSize != null) dispatch(add([modelData.id, selectedSize])) }}
                         >
                             Добавить в корзину
                         </Button>
                     </div>
                 </Col>
             </Row>
+
+            
+            <div style={{ maxWidth: '1000px', marginTop:"30px"}}>
+                <h2 style={{ marginBottom: '10px', marginLeft:"220px"}}>Отзывы</h2>
+                <h5 style={{ marginBottom: '10px', marginLeft:"220px"}}> Оставьте свой отзыв</h5>
+                <FloatingLabel controlId="City" label="Ваш отзыв" className="mb-3" style={{ marginBottom: '10px', marginLeft:"220px",fontSize:"16px", height:"120px"}}>
+                     <Form.Control
+                        required
+                        style={{ width: '100%', height:"80px",fontSize:"15px",lineClamp:"3", textWrap:"wrap"}}
+                        type="text"
+                        name="text"
+                        value={formData}
+                        onChange={(event)=>setFormData(event.target.value)}   
+                    />
+                    
+                    <Button
+                            variant="primary"
+                            size="lg"
+                            style={{ marginTop: '10px', fontSize: '0.9rem' }}
+                            onClick={handleLeaveReview}>
+                            Оставить отзыв
+                        </Button>
+                </FloatingLabel>
+                {reactions.map((reaction, index) => (
+                    <Card key={index} style={{ marginBottom: '10px', marginLeft:"220px",height:"120px", background:"#fcf2f8", marginTop:"20px" }}>
+                        <Card.Body >
+                            <Card.Title style={{fontSize:"17px" }}>{reaction.name}</Card.Title>
+                            <Card.Text style={{fontSize:"14px"}}>{reaction.text}</Card.Text>
+                        </Card.Body>
+                    </Card>
+                ))}
+            </div>
         </div>
     );
 }
 
-export default ModelPage;
+export default ModelPage

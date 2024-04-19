@@ -5,6 +5,7 @@ using Internet_Store.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 
 namespace Internet_Store.Controllers
@@ -228,7 +229,36 @@ namespace Internet_Store.Controllers
                 return Ok("Заказ успешно оформлен");
             }
         }
-        
+        [HttpPost]
+        public async Task<List<ResponseReaction>> GetReactionsForModel(string modelId)
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                var Reactions = await (from r in db.Reactions
+                                join u in db.Users on r.UserId equals u.Id
+                                where r.ModelId.ToString() == modelId
+                                select new ResponseReaction() { Name = u.Name, Text = r.Content }).ToListAsync();
+
+                return Reactions;
+            }
+        }
+        [Authorize(AuthenticationSchemes = "Access", Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> PostReaction(ReactionInfo info)
+        {
+            using (AppDbContext db = new AppDbContext())
+            {
+                var user_email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
+                var user = await db.Users.FirstOrDefaultAsync(u => u.Email == user_email);
+                if (user != null) {
+                    db.Reactions.Add(new Reaction() { Content = info.Text, ModelId = int.Parse(info.ModelId), User = user });
+                    db.SaveChanges();
+                    return Ok("Комментарий успешно добавлен");
+                }
+                return BadRequest("error");
+            }
+        }
+
 
 
     }
