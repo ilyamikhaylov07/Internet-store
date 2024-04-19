@@ -19,6 +19,7 @@ import FAQPage from './FAQ';
 import AboutPage from './About';
 import Order from './Order';
 import GetOrdersPage from './AdminPages/GetOrders';
+import Blog from './Blog';
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -71,7 +72,8 @@ function App() {
         {isLoggedInAdmin && <Route path="/admin-dashboard/get-orders" element={<GetOrdersPage/>} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
         <Route path="/cart" element={<Cart/>}/>
-        {isLoggedIn || isLoggedInAdmin && <Route path="/cart/order?" element={<Order />} />}
+        {isLoggedIn && <Route path="/cart/order?" element={<Order />} />}
+        <Route path="/blog" element={<Blog/>} />
       </Routes>
     </Router>
   );
