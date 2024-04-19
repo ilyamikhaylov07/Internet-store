@@ -205,6 +205,7 @@ namespace Internet_Store.Controllers
                         var item = db.Items.Add(new Item() { ModelWithSizeId = modelws.Id }).Entity;
                         if (user != null)
                         {
+                            modelws.Amount -= 1;
                             order.Street=orderInfo.Street;
                             order.City=orderInfo.City;
                             order.Price=orderInfo.Price-1000;

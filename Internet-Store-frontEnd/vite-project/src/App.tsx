@@ -71,7 +71,7 @@ function App() {
         {isLoggedInAdmin && <Route path="/admin-dashboard/get-orders" element={<GetOrdersPage/>} />}
         <Route path="/catalog/id?" element={<ModelPage />} />
         <Route path="/cart" element={<Cart/>}/>
-        {isLoggedIn && <Route path="/cart/order?" element={<Order />} />}
+        {isLoggedIn || isLoggedInAdmin && <Route path="/cart/order?" element={<Order />} />}
       </Routes>
     </Router>
   );

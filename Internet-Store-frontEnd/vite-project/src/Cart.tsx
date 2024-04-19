@@ -123,10 +123,17 @@ function Cart() {
                 <p>{totalPrice} руб.</p>
                 <h4>Количество товаров:</h4>
                 <p>{products.length}</p>
-                <Button style={{paddingBottom:"10px",marginTop:"57px"}} variant="success" onClick={()=>{
-                  const query = new URLSearchParams({
+                <Button style={{paddingBottom:"10px",marginTop:"57px"}} variant="success" onClick={()=>{if(localStorage.getItem("accessToken")!=null && products.length>0 && localStorage.getItem("isAdmin")=="false")
+                {const query = new URLSearchParams({
                     sum: totalPrice.toString()
-                }).toString(); navigate(`/cart/order?${query}`)}}>Оформить заказ</Button>
+                }).toString(); navigate(`/cart/order?${query}`)}
+                else if(localStorage.getItem("isAdmin")=="true"){
+                  alert("Администратор не может делать заказы")
+                }
+                else if(localStorage.getItem("accessToken")!=null){
+                  alert("сначала добавьте товар в корзину")
+                }
+                else{alert("сначала войдит в систему")}}}>Оформить заказ</Button>
               </Card.Body>
             </Card>
           </Col>

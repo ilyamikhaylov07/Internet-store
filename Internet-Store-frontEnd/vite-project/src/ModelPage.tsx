@@ -158,7 +158,8 @@ function ModelPage() {
                         type="text"
                         name="text"
                         value={formData}
-                        onChange={(event)=>setFormData(event.target.value)}   
+                        onChange={(event)=>{setFormData(event.target.value)}}  
+                        
                     />
                     
                     <Button
