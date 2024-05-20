@@ -22,10 +22,10 @@ import GetOrdersPage from './AdminPages/GetOrders';
 import Blog from './Blog';
 
 function App() {
-  const [selectedTab, setSelectedTab] = useState(null);
+  const [selectedTab, setSelectedTab] = useState(null); // хук для выбранного состояния страницы админа
   const dispatch=useAppDispatch();
   
-  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+  const [isLoggedIn, setIsLoggedIn] = useState(() => { // Объявляем хук
     const accessToken = localStorage.getItem('accessToken');
     const isUser = localStorage.getItem('isUser') === 'true';
     return accessToken !== null && isUser;
@@ -61,7 +61,7 @@ function App() {
       />
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<Registration setIsLoggedIn={setIsLoggedIn} setIsLoggedInAdmin={setIsLoggedInAdmin} />} />
+        <Route path="/login" element={<Registration setIsLoggedIn={setIsLoggedIn} setIsLoggedInAdmin={setIsLoggedInAdmin} />} /*Передаём этот хук в функции страницы регистрации*//>  
         <Route path="/catalog" element={<CatalogPage />} />
         <Route path="FAQ" element={<FAQPage/>}/>
         <Route path="/profile" element={<Profile />} />

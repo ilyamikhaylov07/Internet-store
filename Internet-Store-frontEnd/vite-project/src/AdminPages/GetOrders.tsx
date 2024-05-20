@@ -15,7 +15,7 @@ function GetOrdersPage() {
 
     const fetchOrders = async () => {
         try {
-            const response = await axios.get('https://localhost:7239/Internetstore/Admin/GetAllOrders', {
+            const response = await axios.get('https://localhost:7239/Internetstore/Admin/GetAllOrders', { // Метод получения всех заказов 
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 }
@@ -28,7 +28,7 @@ function GetOrdersPage() {
 
     const handleUpdateState = async (orderId : any) => {
         try {
-            await axios.post(`https://localhost:7239/Internetstore/Admin/UpdateState?state=${newState}&orderId=${orderId}`, null, {
+            await axios.post(`https://localhost:7239/Internetstore/Admin/UpdateState?state=${newState}&orderId=${orderId}`, null, { // метод api для обновления статуса заказа, параметры передаются по query
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
                 }

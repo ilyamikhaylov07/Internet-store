@@ -21,10 +21,10 @@ function Registration({setIsLoggedIn, setIsLoggedInAdmin}) {
   const [passwordsMatch, setPasswordsMatch] = useState(true); // Хук на совпадение пароля
   const [activeTab, setActiveTab] = useState('registration'); // Состояние для отслеживания текущей активной вкладки
   const [isChecked, setisChecked] = useState(false);
-  const handleRegister = (event:any) => {
+  const handleRegister = (event:any) => { // Функция регистрации 
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-   const name1 = formData.get('name');
+   const name1 = formData.get('name'); // Достаём из формы все данные
    const email1 = formData.get('email');
    const password1 = formData.get('password');
 
@@ -36,20 +36,20 @@ function Registration({setIsLoggedIn, setIsLoggedInAdmin}) {
       setPasswordsMatch(true);
     }
 
-    registrationApi(name1, email1, password1, setValidated, setPassword, setConfirmPassword, setPasswordsMatch);
+    registrationApi(name1, email1, password1, setValidated, setPassword, setConfirmPassword, setPasswordsMatch); // Отправляем их на сервер, а оттуда в бд
   };
 const handleChangeIsCheck = () => {
   setisChecked((prev) => !prev)
 }
-  const handleLogin = async (event:any, isChecked:boolean) => {
+  const handleLogin = async (event:any, isChecked:boolean) => {  // Функция авторизации на странице
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
    const email1 = formData.get('email');
    const password1 = formData.get('password');
     
-   const success = isChecked ? await adminApi(email1, password1,setValidated, setPassword ) : await loginApi(email1, password1, setValidated, setPassword);
+   const success = isChecked ? await adminApi(email1, password1,setValidated, setPassword ) : await loginApi(email1, password1, setValidated, setPassword); // обращение к методу api
    if(success){
-    localStorage.setItem('isAdmin', isChecked ? 'true' : 'false');
+    localStorage.setItem('isAdmin', isChecked ? 'true' : 'false'); // устанавливаем роли в зависимости ,кто зашёл
     localStorage.setItem('isUser', isChecked ? 'false' : 'true')
     isChecked ? setIsLoggedInAdmin(true) : setIsLoggedIn(true); 
 
@@ -59,15 +59,12 @@ const handleChangeIsCheck = () => {
         history('/catalog'); // Перенаправляем обычного пользователя на каталог
     }
     
-    // Здесь вызывается функция SetisLoggedIn, которая устанавливает isLoggedIn в true
-  }
-    
-    ;
+  };
   };
   
   
 
-  const togglePasswordVisibility = () => {
+  const togglePasswordVisibility = () => { // различные функции на проверку пароля и т.д.
     setShowPassword(!showPassword);
   };
 

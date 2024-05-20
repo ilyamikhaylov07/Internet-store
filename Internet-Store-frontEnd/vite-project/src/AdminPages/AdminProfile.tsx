@@ -38,7 +38,7 @@ function AdminProfile() {
       .then(data => setAdmin(data))
       .catch(error => {
         console.error('Fetch error:', error);
-        // Обработка ошибки запроса, например, перенаправление на страницу входа
+
       });
   }, []);
 

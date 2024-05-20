@@ -27,19 +27,19 @@ interface Reaction {
 }
 
 function ModelPage() {
-    const [modelData, setModelData] = useState<ModelData | null>(null);
-    const [selectedSize, setSelectedSize] = useState<string | null>(null);
-    const [reactions, setReactions] = useState<Reaction[]>([]);
+    const [modelData, setModelData] = useState<ModelData | null>(null); // хук для вытаскивания моделей типизируем интерфейсом
+    const [selectedSize, setSelectedSize] = useState<string | null>(null); // хук для вытаскивания размеров моделей типизируем интерфейсом
+    const [reactions, setReactions] = useState<Reaction[]>([]); // хук для вытаскивания отзывов моделей типизируем интерфейсом
     const location = useLocation();
     const dispatch = useAppDispatch();
     const [formData, setFormData] = useState<string>('');
 
-    useEffect(() => {
+    useEffect(() => { // Обращаемся к серверу
         const query = new URLSearchParams(location.search);
         const modelName = query.get('id');
 
         // Получение данных о модели
-        fetch(`https://localhost:7239/Internetstore/Models/GetModelInfo?id=${modelName}`, {
+        fetch(`https://localhost:7239/Internetstore/Models/GetModelInfo?id=${modelName}`, { // Достаём из бд ту модель которая передаётся по query
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -79,14 +79,13 @@ function ModelPage() {
             const token=localStorage.getItem('accessToken');
             const headers={'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`};
-            const response = await axios.post('https://localhost:7239/Internetstore/Models/PostReaction', {
+            const response = await axios.post('https://localhost:7239/Internetstore/Models/PostReaction', { // с помощью axios обновление отзыва на товар после отправки 
                 text: formData,
                 modelId: modelData?.id,
             },{headers});
             console.log('Review posted:', response.data);
             setFormData('');
             window.location.reload()
-            // Обновить реакции на странице, если нужно
         } catch (error) {
             console.error('Error posting review:', error);
         }

@@ -25,14 +25,14 @@ function CatalogPage() {
     const [selectedSizes, setSelectedSizes] = useState<{ [key: number]: string }>({});
     const navigate = useNavigate(); 
 
-    const dispatch=useAppDispatch();
+    const dispatch=useAppDispatch(); // react-redux - вызываем функцию dispatch, с помощью которой вызываем нужную функцию slicer и вызываем нужный нам метод, в этом случае добавление товара с размером в redux хранилище
     useEffect(() => {
         fetch('https://localhost:7239/Internetstore/Models/ModelWithCatalog')
             .then(res => res.json())
             .then(data => setProducts(data));
     }, []);
 
-    const handleSizeSelection = (productIndex: number, size: string) => {
+    const handleSizeSelection = (productIndex: number, size: string) => { // Функция для закрепления размера под индексом
         setSelectedSizes((prevSelectedSizes) => ({
             ...prevSelectedSizes,
             [productIndex]: size
@@ -89,9 +89,7 @@ function CatalogPage() {
                                             ))}
                                         </ButtonGroup>
                                     </div>
-
-                                    {/* Кнопка "Купить" */}
-                                    <Button variant="primary" onClick={()=>{if(selectedSizes[index]!=null) dispatch(add([product.id,selectedSizes[index]])) }}>Добавить в корзину</Button>
+                                    <Button variant="primary" onClick={()=>{if(selectedSizes[index]!=null) dispatch(add([product.id,selectedSizes[index]])) }} /*Вызов dispath при нажатии добавить в корзину */>Добавить в корзину</Button>
                                 </Card.Body>
                             </Card>
                         </Col>

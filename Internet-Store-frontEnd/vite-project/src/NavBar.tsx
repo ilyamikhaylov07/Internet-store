@@ -17,8 +17,9 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
             <Nav.Link as={Link} to="/blog">Блог</Nav.Link>
             <Nav.Link as={Link} to="/about">О нас</Nav.Link>
             <Nav.Link as={Link} to="/FAQ">FAQ</Nav.Link>
-            {/* Страницы для администратора */}
+            
             </Nav>
+            {/* Страницы для администратора */}
             <Nav className="ms-auto">
             {isLoggedInAdmin && (
               <>
@@ -33,7 +34,7 @@ function MainBar({isLoggedIn, handleLogoutUser, isLoggedInAdmin, handleLogoutAdm
               )}
             
             <Nav.Link as={Link} to="/cart">Корзина</Nav.Link>
-            {isLoggedIn || isLoggedInAdmin ? (
+            {isLoggedIn || isLoggedInAdmin ? ( // Проверка кто авторизован, для того, чтобы вызывать тот или иной метод для выхода из системы
               <>
                 <Nav.Link onClick={isLoggedInAdmin ? handleLogoutAdmin : handleLogoutUser} as={Link} to="/login">Выйти</Nav.Link>
               </>

@@ -20,7 +20,7 @@ function Cart() {
   const [products, setProducts] = useState<Product[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const navigate = useNavigate();
-  const IdSize = useAppSelector((state) => state.reducer.IdModelContainer.IdContainer);
+  const IdSize = useAppSelector((state) => state.reducer.IdModelContainer.IdContainer); // Функция, которая достаёт всё из redux хранилища
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function Cart() {
       axios
         .post("https://localhost:7239/Internetstore/Models/GetCardModelsByIdSize", ModelInfo)
         .then((response) => {
-          console.log(response.data); // Log the response data to check its format
+          console.log(response.data); 
           const { id, name, price, materials, brand, size, image } = response.data;
 
           // Создаем объект продукта на основе полученных данных

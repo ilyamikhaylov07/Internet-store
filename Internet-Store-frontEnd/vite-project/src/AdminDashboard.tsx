@@ -1,7 +1,7 @@
 import { ListGroup } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 
-function AdminDashboard({ selectedTab, setSelectedTab }) {
+function AdminDashboard({ selectedTab, setSelectedTab }) { // Можно сказать второй навбар, только для админа, в нём реализованы все функции админа
   // Получаем текущий путь
   const location = useLocation();
 

@@ -31,10 +31,10 @@ interface Order {
 
 function Profile() {
   const history = useNavigate();
-  const [orders, setOrders] = useState<Order[]>([]);
-  const [user, setUser] = useState<User | null>(null);
-  const [isEditingPhoneNumber, setIsEditingPhoneNumber] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [orders, setOrders] = useState<Order[]>([]); // хук для вытягивания заказов, типизированый интерфейсом
+  const [user, setUser] = useState<User | null>(null); // хук для вытягивания user, типизированый интерфейсом
+  const [isEditingPhoneNumber, setIsEditingPhoneNumber] = useState(false); // Хук для изменения состояний
+  const [phoneNumber, setPhoneNumber] = useState('');// хук для изменения номера телефона
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
@@ -43,7 +43,7 @@ function Profile() {
       return;
     }
 
-    fetch('https://localhost:7239/Internetstore/Profile/GetUserInProfile', {
+    fetch('https://localhost:7239/Internetstore/Profile/GetUserInProfile', { // Получения данных user для личного кабинета
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token}`
@@ -63,7 +63,7 @@ function Profile() {
         console.error('Fetch error:', error);
       });
 
-    fetch('https://localhost:7239/Internetstore/Profile/GetOrdersUser', {
+    fetch('https://localhost:7239/Internetstore/Profile/GetOrdersUser', { // Получение заказов данного user
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` }
     })
@@ -82,7 +82,7 @@ function Profile() {
       return;
     }
 
-    fetch(`https://localhost:7239/Internetstore/Profile/UpdateNumberPhoneUser?numberphone=${phoneNumber}`, {
+    fetch(`https://localhost:7239/Internetstore/Profile/UpdateNumberPhoneUser?numberphone=${phoneNumber}`, { // Изменение номера телефона
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`,

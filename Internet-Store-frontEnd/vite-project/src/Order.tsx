@@ -28,8 +28,6 @@ function Order() {
         idies.push(element[0]);
         sizes.push(element[1]);
     });
-
-    // Инициализация начального значения formData
     
 
     // Обработчик выбора метода оплаты

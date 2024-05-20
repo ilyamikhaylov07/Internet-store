@@ -23,8 +23,6 @@ async function loginApi(email, password, setValidated, setPassword) {
         }
 
         const data = await response.json();
-
-
         // Сохраняем токен в localStorage
         localStorage.setItem('accessToken', data.accessToken);
         console.log(localStorage)
