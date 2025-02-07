@@ -30,7 +30,7 @@
 
 1. Клонируйте репозиторий:
    ```sh
-   git clone https://github.com/your-repo.git
+   git clone https://github.com/ilyamikhaylov07/Internet-store
    cd your-repo
    ```
 2. Установите зависимости для фронтенда:
